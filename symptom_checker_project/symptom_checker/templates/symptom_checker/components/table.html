@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="table.css">
+    <title>Document</title>
+</head>
+<body>
+      <!--Header-->
+  <div class="header">
+    <button id="toggleSidebar" class="toggle-btn"><i class='bx bx-menu'></i></button> <!-- Button to toggle sidebar -->
+    <a href="#" class="title"></a>
+    <div class="header-right">
+        <a href="#"><i class="bx bx-bell"></i></a>
+        <button type="submit" class="SOSBtn">SOS <i class="bx bsx-phone-call"></i></button>
+    </div>
+  </div>
+    <!-- Sidebar for navigation -->
+  <div class="sidebar">
+    <div class="logo-details">
+      <!-- Icon and logo name -->
+      <i class='bx bx-health'></i>
+      <div class="logo_name">Medcare</div>
+      <i class='bx bx-menu' id="btn"></i> <!-- Menu button to toggle sidebar -->
+    </div>
+    <ul class="nav-list">
+      <!-- Search bar -->
+      <li>
+        <i class='bx bx-search'></i>
+        <input type="text" placeholder="Search...">
+        <span class="tooltip">Search</span>
+      </li>
+      <!-- List of navigation items -->
+      <li>
+        <a href="/sidebar.html">
+          <i class='bx bx-grid-alt'></i>
+          <span class="links_name">Dashboard</span>
+        </a>
+        <span class="tooltip">Dashboard</span>
+      </li>
+      <!-- Additional navigation items -->
+      <li>
+        <a href="./Pages/Treatment.html">
+          <i class='bx bx-user'></i>
+          <span class="links_name">Treatment Plan</span>
+        </a>
+        <span class="tooltip">Treatment</span>
+      </li>
+      <li>
+        <a href="./Pages/chat.html">
+          <i class='bx bx-chat'></i>
+          <span class="links_name">Messages</span>
+        </a>
+        <span class="tooltip">Messages</span>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bx-pie-chart-alt-2'></i>
+          <span class="links_name">Patient</span>
+        </a>
+        <span class="tooltip">Patient</span>
+      </li>
+    
+      <li>
+        <a href="#">
+          <i class='bx bx-cog'></i>
+          <span class="links_name">Setting</span>
+        </a>
+        <span class="tooltip">Setting</span>
+      </li>
+
+      <!-- Profile section -->
+      <li class="profile">
+        <div class="profile-details">
+          <!--<img src="profile.jpg" alt="profileImg">-->
+          <div class="name_job">
+            <div class="name">MedCare</div>
+            <div class="job">User</div>
+          </div>
+        </div>
+        <a href="#"><i class='bx bx-log-out' id="log_out"></i></a> <!-- Logout icon -->
+      </li>
+    </ul>
+  </div>
+
+    <!--Table Content-->
+<section class="main-section">
+    <div class="text">AI Medical Responses Records</div>
+    <div class="sidedrawer"></div>
+
+    <div class="table-container">
+        <div class="table-header">
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Search...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="view-options">
+                <label for="rows-select">Show rows:</label>
+                <select id="rows-select">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+        <table id="treatment-table">
+            <thead>
+                <tr>
+                    <th>Profile Image</th>
+                    <th data-column="id" data-order="desc">ID <i class='bx bxs-sort-alt'></i></th>
+                    <th data-column="UserName" data-order="desc">Username <i class='bx bxs-sort-alt'></i></th>
+                    <th data-column="userQuery" data-order="desc">User Query <i class='bx bxs-sort-alt'></i></th>
+                    <th data-column="responseTopic" data-order="desc">Response Topic <i class='bx bxs-sort-alt'></i></th>
+                    <th data-column="SOSStatus" data-order="desc">SOS Status <i class='bx bxs-sort-alt'></i></th>
+                    <th data-column="action" data-order="desc"></th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- User data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    const treatments = [
+    { id: 1, UserName: "Gavin01", userQuery: "i have a Sprain", responseTopic: "Sprain Injury", SOSStatus: "Not Active", action: 60000, profileImg: "https://crhscountyline.com/wp-content/uploads/2020/03/Capture.png" },
+    { id: 2, UserName: "Gavin01", userQuery: "i caused a Dislocated shoulder", responseTopic: "Dislocation injury", SOSStatus: "Active", action: 55000, profileImg: "https://crhscountyline.com/wp-content/uploads/2020/03/Capture.png" },
+    { id: 3, UserName: "Gavin01", userQuery: "i have few bruises on my feet", responseTopic: "Contusions to soft tissue", SOSStatus: "Not Active", action: 75000, profileImg: "https://crhscountyline.com/wp-content/uploads/2020/03/Capture.png" },
+    { id: 4, UserName: "Gavin01", userQuery: "my friend got knocked out", responseTopic: "Concussions", SOSStatus: "Not Active", action: 52000, profileImg: "https://crhscountyline.com/wp-content/uploads/2020/03/Capture.png" },
+];
+
+
+
+let currentData = [...treatments];
+let rowsPerPage = 10;
+let currentPage = 1;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const tableBody = document.getElementById('table-body');
+    const searchInput = document.getElementById('search-input');
+    const rowsSelect = document.getElementById('rows-select');
+
+    function renderTable(data) {
+    tableBody.innerHTML = '';
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedData = data.slice(start, end);
+    
+    paginatedData.forEach(treatment => {
+        const row = `
+            <tr>
+                <td><img src="${treatment.profileImg}" alt="Profile Image"></td>
+                <td>${treatment.id}</td>
+                <td>${treatment.UserName}</td>
+                <td>${treatment.userQuery}</td>
+                <td>${treatment.responseTopic}</td>
+                <td>${treatment.SOSStatus}</td>
+                <td>
+                    <div class="dropdown">
+                        <button type="button" class="dropdown-button" onclick="showMenu()"><i class='bx bx-dots-vertical-rounded'></i></button>
+                        <div class="dropdown-content">
+                            <span class="dropdown-link">Delete <i class='bx bx-trash'></i></span>
+                            <span class="dropdown-link">Download <i class='bx bx-download'></i></span>
+                            <span class="dropdown-link">Treatment <i class='bx bx-plus-medical'></i></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', row);
+    });
+}
+
+    function sortTable(column, order) {
+        currentData.sort((a, b) => {
+            if (typeof a[column] === 'string') {
+                return order === 'asc' ? a[column].localeCompare(b[column]) : b[column].localeCompare(a[column]);
+            } else {
+                return order === 'asc' ? a[column] - b[column] : b[column] - a[column];
+            }
+        });
+        renderTable(currentData);
+    }
+
+    function filterTable(searchTerm) {
+        const filteredData = treatments.filter(employee =>
+            Object.values(treatment).some(value =>
+                value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        );
+        currentData = filteredData;
+        renderTable(currentData);
+    }
+
+    function updateRowsPerPage() {
+        rowsPerPage = parseInt(rowsSelect.value, 10);
+        renderTable(currentData);
+    }
+
+    document.querySelectorAll('th').forEach(header => {
+        header.addEventListener('click', () => {
+            const column = header.getAttribute('data-column');
+            const order = header.getAttribute('data-order');
+            const newOrder = order === 'asc' ? 'desc' : 'asc';
+            header.setAttribute('data-order', newOrder);
+            sortTable(column, newOrder);
+        });
+    });
+
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value;
+        filterTable(searchTerm);
+    });
+
+    rowsSelect.addEventListener('change', updateRowsPerPage);
+
+    // Initial render
+    renderTable(currentData);
+});
+
+
+//action button functions
+"use strict";
+
+const dropdownContent = document.querySelector(".dropdown");
+
+function showMenu(event) {
+    event.stopPropagation(); 
+    const dropdown = event.currentTarget.parentElement;
+    dropdown.classList.toggle("active");
+}
+
+window.onclick = (event) => {
+    if (!event.target.matches(".dropdown-button")) {
+        const dropdowns = document.querySelectorAll(".dropdown");
+        dropdowns.forEach(dropdown => {
+            dropdown.classList.remove("active");
+        });
+    }
+};
+
+        // Get the sidebar, close button, and search button elements
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+        let navList = document.querySelector(".nav-list");
+        
+        // Event listener for the menu button to toggle the sidebar open/close
+        closeBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open"); // Toggle the sidebar's open state
+          navList.classList.toggle("scroll"); // Toggle scroll state
+          menuBtnChange(); // Call function to change button icon
+        });
+        
+        // Event listener for the search button to open the sidebar
+        searchBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open");
+          navList.classList.toggle("scroll");
+          menuBtnChange(); // Call function to change button icon
+        });
+        
+        // Function to change the menu button icon
+        function menuBtnChange() {
+          if (sidebar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right"); // Change icon to indicate closing
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu"); // Change icon to indicate opening
+          }
+        }
+        // Get the toggle button element
+        let toggleBtn = document.querySelector("#toggleSidebar");
+        // Event listener for the sidebar toggle button
+        toggleBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open"); // Toggle the sidebar's open state
+          navList.classList.toggle("scroll"); // Toggle scroll state
+          menuBtnChange(); // Call function to change button icon
+        });
+</script>
+</body>
+</html>

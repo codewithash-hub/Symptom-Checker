@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medcare | Treatment Plan</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Include Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <section class="home-section">
+        <div class="text">Treatment Plan</div>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <h1>AI Medical Responses</h1>
+
+    <!-- Medical Responses Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Response Topic</th>
+          <th>Date</th>
+          <th>SOS Active</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody id="responseTableBody">
+        <!-- Rows will be dynamically added here -->
+      </tbody>
+    </table>
+</div>
+    </section>
+
+    <div class="sidebar">
+        <h2>Medical AI</h2>
+        <ul id="responseList">
+          <!-- Response topics will be dynamically added here -->
+        </ul>
+    </div>
+
+<script>
+// Data for table
+const responses = [
+  { topic: "Chest Pain Diagnosis", date: "2024-10-23", sos: true, treatment: "Aspirin, ECG Monitoring" },
+  { topic: "Headache Evaluation", date: "2024-10-21", sos: false, treatment: "Paracetamol, Rest" },
+  { topic: "Fever Management", date: "2024-10-19", sos: false, treatment: "Ibuprofen, Hydration" },
+  { topic: "Abdominal Pain Diagnosis", date: "2024-10-18", sos: true, treatment: "Ultrasound, Antibiotics" },
+];
+
+// Populate table and sidebar dynamically
+const responseTableBody = document.getElementById('responseTableBody');
+const responseList = document.getElementById('responseList');
+
+// Function to add responses to the table and sidebar
+function populateResponses() {
+  responses.forEach((response, index) => {
+    // Add to table
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${response.topic}</td>
+      <td>${response.date}</td>
+      <td>${response.sos ? "Yes" : "No"}</td>
+      <td class="options">
+        <button onclick="downloadResponse(${index})">Download</button>
+        <button onclick="deleteResponse(${index})">Delete</button>
+      </td>
+    `;
+    responseTableBody.appendChild(row);
+
+    // Add to sidebar
+    const listItem = document.createElement('li');
+    listItem.textContent = response.topic;
+    listItem.onclick = () => viewTreatmentPlan(index);
+    responseList.appendChild(listItem);
+  });
+}
+
+// Function to view treatment plan
+function viewTreatmentPlan(index) {
+  alert(`Treatment Plan for ${responses[index].topic}: \n\n${responses[index].treatment}`);
+}
+
+// Function to download a response
+function downloadResponse(index) {
+  const response = responses[index];
+  const content = `Response Topic: ${response.topic}\nDate: ${response.date}\nSOS Active: ${response.sos ? "Yes" : "No"}\nTreatment: ${response.treatment}`;
+  
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${response.topic}.txt`;
+  link.click();
+  
+  URL.revokeObjectURL(url);
+}
+
+// Function to delete a response
+function deleteResponse(index) {
+  responses.splice(index, 1);
+  // Refresh the table and sidebar
+  responseTableBody.innerHTML = "";
+  responseList.innerHTML = "";
+  populateResponses();
+}
+
+// Initialize the UI with the data
+populateResponses();
+
+</script>
+</body>
+</html>
