@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="{% static 'symptom_checker/css/style.css' %}"> -->
     <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}">
-    <!-- <link rel="stylesheet" href="sidebar.css"> -->
     <title>Medcare | AI</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{% static 'symptom_checker/js/connect.js' %}"></script>
 </head>
 <body>
     <!-- Header -->
@@ -21,24 +19,6 @@
             <button type="button" class="SOSBtn" id="openModalBtn">SOS <i class="bx bsx-phone-call"></i></button>
         </div>
     </div>
-
-    <!-- The Modal
-    <div id="contactModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Contact Emergency Team</h2>
-            <p>For urgent medical attention, please provide your details below.</p>
-            <form id="contactForm">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" placeholder="Doe Smith" required>
-                <label for="UserNum">Contact Number:</label>
-                <input type="number" id="UserNum" required>
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" placeholder="Explain your needs..." required></textarea>
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    </div> -->
 
     <!-- Sidebar for navigation -->
     <div class="sidebar">
@@ -73,246 +53,156 @@
     <!-- Main content area -->
     <section class="home-section">
         <div class="text">Symptom Checker</div>
-
-        <!-- <div class="container">
-            <form method="POST" id="symptom-form">
-                {% csrf_token %}
-                <label for="symptoms">Enter your symptoms:</label>
-                <textarea name="symptoms" id="symptoms" placeholder="Describe your symptoms here..."></textarea>
-                <button type="button" onclick="checkSymptoms()">Check Symptoms</button>
-            </form>
-            <div id="diagnosis"></div>
-        </div> -->
+        <!-- SOS Modal -->
+        <div id="contactModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Contact Us</h2>
+                <form id="contactForm">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required>
+                    
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+                    
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
 
         <form method="POST" id="symptom-form">
             {% csrf_token %}
-        <div class="chat-container">
-            <!-- Chat Area -->
-            <div class="chat-body" id="chat-body">
-              
-                <!-- User Message -->
-              <div class="message user-message">
-                <div class="user-avatar">
-                  <img src="user-avatar.png" alt="User Avatar">
+            <div class="chat-container">
+                <div class="chat-body" id="chat-body">
+                    
                 </div>
-                <div class="message-content">
-                  <p>What is the purpose of Medcare</p>
-                  <span class="timestamp">15m</span>
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="Enter a prompt here...">
+                    <button type="button" onclick="sendMessage()">Send</button>
                 </div>
-              </div>
-        
-              <!-- AI Response -->
-              <div class="message ai-message">
-                <div class="ai-avatar">
-                  <img src="ai-avatar.png" alt="AI Avatar">
-                </div>
-                <div class="message-content">
-                  <img src="/mnt/data/original-aabe321158e9bd852461c551a6e9d70f.png" alt="Image Description" class="message-image">
-                  <p>Medcare is a AI LLM which assitants individauls with medical or health related, providing realtime approved medical responses in minutes.</p>
-                  <span class="timestamp">15m</span>
-                  <!-- <div id="diagnosis"></div> -->
-                  <div class="message-actions" id="diagnosis">
-                    <button class="like-btn">👍</button>
-                    <button class="dislike-btn">👎</button>
-                    <button class="download-btn" style="font-size: 18px;"><i class='bx bx-download'></i></button>
-                    <button class="regenerate-btn" style="font-size: 18px;"><i class='bx bx-loader bx-flip-horizontal'></i> </button>
-                  </div>
-                </div>
-              </div>
             </div>
-        
-            <!-- Input Area -->
-            <div class="chat-input">
-                <input name="symptoms" id="symptoms" placeholder="Describe your symptoms here...">
-                <!-- <input type="text" name="symptoms" id="symptoms" placeholder="Enter a prompt here..."> -->
-                <!-- <input type="text" id="user-input" placeholder="Enter a prompt here..." > -->
-                <!-- <button onclick="sendMessage()">Send</button> -->
-                <button type="button" onclick="checkSymptoms()">Check Symptoms</button>
-                <!-- <button type="button" onclick="checkSymptoms()">Send</button> -->
-            </div>
-          </div>
-        </form>
+        </form> 
+
+       
     </section>
 
     <script>
-        function checkSymptoms() {
-    $.post("/check_symptoms/", {
-        symptoms: $("#symptoms").val(),
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-    }, function(data) {
-        $("#diagnosis").html(data.diagnosis);
-    });
-}
-
-// Sidebar toggle functionality
-let sidebar = document.querySelector(".sidebar");
-let closeBtn = document.querySelector("#btn");
-closeBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-    menuBtnChange();
-});
-
-function menuBtnChange() {
-    closeBtn.classList.toggle("bx-menu-alt-right", sidebar.classList.contains("open"));
-    closeBtn.classList.toggle("bx-menu", !sidebar.classList.contains("open"));
-}
-
-// Modal functionality
-var modal = document.getElementById("contactModal");
-var openModalBtn = document.getElementById("openModalBtn");
-var closeModalBtn = document.getElementsByClassName("close")[0];
-
-openModalBtn.addEventListener("click", () => modal.style.display = "block");
-closeModalBtn.addEventListener("click", () => modal.style.display = "none");
-window.addEventListener("click", (e) => {
-    if (e.target == modal) modal.style.display = "none";
-});
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    $.post("/check_symptoms/", {
-        symptoms: $("#symptoms").val(),
-        csrfmiddlewaretoken: getCookie('csrftoken')
-    }, function(data) {
-        $("#diagnosis").html(data.diagnosis);
-    });
-
-
-// function sendMessage() {
-// const inputField = document.getElementById("symptoms");
-// const message = inputField.value.trim();
-
-// if (message) {
-//     appendMessage("user-message", message);
-//     inputField.value = "";
-
-//     // Simulate bot response
-//     setTimeout(() => {
-//     appendMessage("ai-message", "This is an AI-generated response.");
-//     }, 1000);
-// }
-// }
-
-// function appendMessage(type, message) {
-//     const chatBody = document.getElementById("chat-body");
-
-//     const messageDiv = document.createElement("div");
-//     messageDiv.classList.add("message", type);
-    
-//     const avatarDiv = document.createElement("div");
-//     avatarDiv.classList.add(type === "user-message" ? "user-avatar" : "ai-avatar");
-
-//     const avatarImg = document.createElement("img");
-//     avatarImg.src = type === "user-message" ? "user-avatar.png" : "ai-avatar.png";
-//     avatarDiv.appendChild(avatarImg);
-    
-//     const messageContentDiv = document.createElement("div");
-//     messageContentDiv.classList.add("message-content");
-    
-//     const messageText = document.createElement("p");
-//     messageText.textContent = message;
-//     messageContentDiv.appendChild(messageText);
-
-//     const timestampSpan = document.createElement("span");
-//     timestampSpan.classList.add("timestamp");
-//     timestampSpan.textContent = "Just now";
-//     messageContentDiv.appendChild(timestampSpan);
-
-//     messageDiv.appendChild(avatarDiv);
-//     messageDiv.appendChild(messageContentDiv);
-
-//     chatBody.appendChild(messageDiv);
-//     chatBody.scrollTop = chatBody.scrollHeight;
-//     }
-
-function checkSymptoms() {
-    const userMessage = $("#symptoms").val().trim();
-    
-    if (userMessage) {
-        // Append user's message to the chat
-        appendMessage("user-message", userMessage);
-        $("#symptoms").val(""); // Clear the input field
-
-        // Make the AJAX request to get AI response
-        $.post("/check_symptoms/", {
-            symptoms: userMessage,
-            csrfmiddlewaretoken: '{{ csrf_token }}'
-        }, function(data) {
-            // Append AI's response to the chat
-            appendMessage("ai-message", data.diagnosis);
+        // SIDEBAR \\
+        // Get the sidebar, close button, and search button elements
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+        let navList = document.querySelector(".nav-list");
+        
+        // Event listener for the menu button to toggle the sidebar open/close
+        closeBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open"); // Toggle the sidebar's open state
+          navList.classList.toggle("scroll"); // Toggle scroll state
+          menuBtnChange(); // Call function to change button icon
         });
-    }
-}
+        
+        // Event listener for the search button to open the sidebar
+        searchBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open");
+          navList.classList.toggle("scroll");
+          menuBtnChange(); // Call function to change button icon
+        });
+        
+        // Function to change the menu button icon
+        function menuBtnChange() {
+          if (sidebar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right"); // Change icon to indicate closing
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu"); // Change icon to indicate opening
+          }
+        }
+        // Get the toggle button element
+        let toggleBtn = document.querySelector("#toggleSidebar");
+        // Event listener for the sidebar toggle button
+        toggleBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open"); // Toggle the sidebar's open state
+          navList.classList.toggle("scroll"); // Toggle scroll state
+          menuBtnChange(); // Call function to change button icon
+        });
+        // END SIDEBAR \\
 
-// Function to append messages to the chat area
-function appendMessage(type, message) {
-    const chatBody = document.getElementById("chat-body");
+        function sendMessage() {
+            var userInput = $("#user-input").val(); // Get the input value
+            if (userInput.trim() === "") return; // Check if input is not empty
 
-    const messageDiv = document.createElement("div");
-    messageDiv.classList.add("message", type);
-    
-    const avatarDiv = document.createElement("div");
-    avatarDiv.classList.add(type === "user-message" ? "user-avatar" : "ai-avatar");
+            // Add the user message to the chat
+            $("#chat-body").append(`
+                <div class="message user-message">
+                    <div class="user-avatar">
+                        <img src="/symptom_checker_project/symptom_checker/templates/symptom_checker/images/user-circle.svg" alt="User Avatar">
+                    </div>
+                    <div class="message-content">
+                        <p>${userInput}</p>
+                        <span class="timestamp">Now</span>
+                    </div>
+                </div>
+            `);
+            
+            // Clear the input field
+            $("#user-input").val("");
 
-    const avatarImg = document.createElement("img");
-    avatarImg.src = type === "user-message" ? "user-avatar.png" : "ai-avatar.png";
-    avatarDiv.appendChild(avatarImg);
-    
-    const messageContentDiv = document.createElement("div");
-    messageContentDiv.classList.add("message-content");
-    
-    const messageText = document.createElement("p");
-    messageText.textContent = message;
-    messageContentDiv.appendChild(messageText);
+            // Send the data to the back-end (Django view)
+            $.post("/check_symptoms/", {
+                symptoms: userInput,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function(data) {
+                // Handle the AI response
+                var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
+                
+                // Add the AI response to the chat
+                $("#chat-body").append(`
+                    <div class="message ai-message">
+                        <div class="ai-avatar">
+                            <img src="/symptom_checker_project/symptom_checker/templates/symptom_checker/images/chat-gpt.png" alt="AI Avatar">
+                        </div>
+                        <div class="message-content">
+                            <p>${aiResponse}</p>
+                            <span class="timestamp">Now</span>
+                        </div>
+                    </div>
+                `);
 
-    const timestampSpan = document.createElement("span");
-    timestampSpan.classList.add("timestamp");
-    timestampSpan.textContent = "Just now";
-    messageContentDiv.appendChild(timestampSpan);
+                // Scroll to the bottom of the chat
+                $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
+            });
+        }
 
-    messageDiv.appendChild(avatarDiv);
-    messageDiv.appendChild(messageContentDiv);
-
-    chatBody.appendChild(messageDiv);
-    chatBody.scrollTop = chatBody.scrollHeight; // Scroll to the bottom
-}
-
-
-        // Get modal element
+        // Get the modal
         var modal = document.getElementById("contactModal");
         var openModalBtn = document.getElementById("openModalBtn");
-        var closeModalBtn = document.getElementsByClassName("close")[0];
-    
-        openModalBtn.addEventListener("click", openModal);
-        closeBtn.addEventListener("click", closeModal);
-        window.addEventListener("click", outsideClick);
-    
-        function openModal() {
-        modal.style.display = "block";
+        var closeModal = document.getElementById("closeModal");
+
+        openModalBtn.onclick = function() {
+            modal.style.display = "block";
         }
-    
-        function closeModal() {
-        modal.style.display = "none";
-        }
-    
-        function outsideClick(e) {
-        if (e.target == modal) {
+
+        // When the user clicks on <span> (x), close the modal
+        closeModal.onclick = function() {
             modal.style.display = "none";
         }
-    }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Handle form submission
+        document.getElementById("contactForm").onsubmit = function(event) {
+            event.preventDefault(); // Prevent default form submission
+            // You can add your form submission logic here
+            alert("Form submitted!"); // Placeholder alert
+            modal.style.display = "none"; // Close the modal after submission
+        }
     </script>
 </body>
 </html>

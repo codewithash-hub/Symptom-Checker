@@ -441,38 +441,28 @@
   overflow-y: scroll;
 }
 
-/* Modal container */
+/* Modal styles */
 .modal {
-  display: none; 
-  position: fixed; 
-  z-index: 1; 
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
   left: 0;
   top: 0;
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; 
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
-  padding-top: 60px;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-/* Modal content box */
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto; 
+  margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; 
-  max-width: 500px; 
-  border-radius: 8px;
-}
-.modal-content h2{
-    font-size: 28px;
-    font-weight: 600;
-    text-align: center;
+  width: 26%; /* Could be more or less, depending on screen size */
 }
 
-/* Close button */
 .close {
   color: #aaa;
   float: right;
@@ -487,32 +477,31 @@
   cursor: pointer;
 }
 
-/* Form styling */
 form {
   display: flex;
   flex-direction: column;
 }
 
-form label {
+label {
   margin: 10px 0 5px;
 }
 
-form input, form textarea {
+input, textarea {
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-form button {
+button {
   padding: 10px;
-  border: none;
-  border-radius: 4px;
   background-color: #4CAF50;
   color: white;
-  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-form button:hover {
+button:hover {
   background-color: #45a049;
 }
