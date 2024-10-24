@@ -8,6 +8,9 @@ from .forms import SignUpForm, LoginForm
 def home(request):
     return render(request, 'symptom_checker/home.html')
 
+def treatment_plan(request):
+    return render(request, 'treatment_plan.html')
+
 def check_symptoms(request):
     if request.method == 'POST':
         symptoms = request.POST.get('symptoms')

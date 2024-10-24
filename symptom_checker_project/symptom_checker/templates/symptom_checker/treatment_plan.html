@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medcare | AI</title>
+</head>
+<body>
+        <!-- Header -->
+        <div class="header">
+            <button id="toggleSidebar" class="toggle-btn"><i class='bx bx-menu'></i></button>
+            <a href="#" class="title">Medcare</a>
+            <div class="header-right">
+                <a href="#"><i class="bx bx-bell"></i></a>
+                <button type="button" class="SOSBtn" id="openModalBtn">SOS <i class="bx bsx-phone-call"></i></button>
+            </div>
+        </div>
+    
+        <!-- Sidebar for navigation -->
+        <div class="sidebar">
+            <div class="logo-details">
+                <i class='bx bx-health'></i>
+                <div class="logo_name">Medcare</div>
+                <i class='bx bx-menu' id="btn"></i>
+            </div>
+            <ul class="nav-list">
+                <li>
+                    <i class='bx bx-search'></i>
+                    <input type="text" placeholder="Search...">
+                    <span class="tooltip">Search</span>
+                </li>
+                <li><a href="#"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a><span class="tooltip">Dashboard</span></li>
+                <li><a href="./Pages/Treatment.html"><i class='bx bx-user'></i><span class="links_name">Treatment Plan</span></a><span class="tooltip">Treatment</span></li>
+                <li><a href="./Pages/chat.html"><i class='bx bx-chat'></i><span class="links_name">Messages</span></a><span class="tooltip">Messages</span></li>
+                <li><a href="#"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Patient</span></a><span class="tooltip">Patient</span></li>
+                <li><a href="#"><i class='bx bx-cog'></i><span class="links_name">Settings</span></a><span class="tooltip">Settings</span></li>
+                <li class="profile">
+                    <div class="profile-details">
+                        <div class="name_job">
+                            <div class="name">MedCare</div>
+                            <div class="job">User</div>
+                        </div>
+                    </div>
+                    <a href="#"><i class='bx bx-log-out' id="log_out"></i></a>
+                </li>
+            </ul>
+        </div>
+
+    <!--Table Content-->
+    <section class="main-section">
+        <div class="text">AI Medical Responses Records</div>
+        <div class="sidedrawer"></div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <div class="search-wrapper">
+                    <input type="text" id="search-input" placeholder="Search...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="view-options">
+                    <label for="rows-select">Show rows:</label>
+                    <select id="rows-select">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+            <table id="treatment-table">
+                <thead>
+                    <tr>
+                        <th>Profile Image</th>
+                        <th data-column="id" data-order="desc">ID <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="UserName" data-order="desc">Username <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="userQuery" data-order="desc">User Query <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="responseTopic" data-order="desc">Response Topic <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="SOSStatus" data-order="desc">SOS Status <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="action" data-order="desc"></th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- User data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

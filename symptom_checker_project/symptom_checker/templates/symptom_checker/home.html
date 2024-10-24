@@ -85,8 +85,6 @@
                 </div>
             </div>
         </form> 
-
-       
     </section>
 
     <script>
@@ -129,19 +127,27 @@
         });
         // END SIDEBAR \\
 
+        function getCurrentDateTime(){
+            const now = new Date();
+            return now.toLocaleString();
+        }
+
         function sendMessage() {
             var userInput = $("#user-input").val(); // Get the input value
             if (userInput.trim() === "") return; // Check if input is not empty
+
+            //current timestamp
+            var currentTime = getCurrentDateTime();
 
             // Add the user message to the chat
             $("#chat-body").append(`
                 <div class="message user-message">
                     <div class="user-avatar">
-                        <img src="/symptom_checker_project/symptom_checker/templates/symptom_checker/images/user-circle.svg" alt="User Avatar">
+                        <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt="">
                     </div>
                     <div class="message-content">
                         <p>${userInput}</p>
-                        <span class="timestamp">Now</span>
+                        <span class="timestamp">${currentTime}</span>
                     </div>
                 </div>
             `);
@@ -158,17 +164,19 @@
                 var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
                 
                 // Add the AI response to the chat
-                $("#chat-body").append(`
+                setTimeout(() =>{
+                    $("#chat-body").append(`
                     <div class="message ai-message">
                         <div class="ai-avatar">
-                            <img src="/symptom_checker_project/symptom_checker/templates/symptom_checker/images/chat-gpt.png" alt="AI Avatar">
+                            <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
                         </div>
                         <div class="message-content">
                             <p>${aiResponse}</p>
-                            <span class="timestamp">Now</span>
+                            <span class="timestamp">${currentTime}</span>
                         </div>
                     </div>
                 `);
+            },2000);
 
                 // Scroll to the bottom of the chat
                 $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
@@ -203,6 +211,7 @@
             alert("Form submitted!"); // Placeholder alert
             modal.style.display = "none"; // Close the modal after submission
         }
+
     </script>
 </body>
 </html>
