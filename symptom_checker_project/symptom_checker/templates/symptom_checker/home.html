@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'symptom_checker/css/style.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'symptom_checker/css/style.css' %}"> -->
     <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}">
-    <link rel="stylesheet" href="sidebar.css">
+    <!-- <link rel="stylesheet" href="sidebar.css"> -->
     <title>Medcare | AI</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -72,7 +72,8 @@
     <!-- Main content area -->
     <section class="home-section">
         <div class="text">Symptom Checker</div>
-        <div class="container">
+
+        <!-- <div class="container">
             <form method="POST" id="symptom-form">
                 {% csrf_token %}
                 <label for="symptoms">Enter your symptoms:</label>
@@ -80,12 +81,57 @@
                 <button type="button" onclick="checkSymptoms()">Check Symptoms</button>
             </form>
             <div id="diagnosis"></div>
-        </div>
+        </div> -->
+
+        <form method="POST" id="symptom-form">
+            {% csrf_token %}
+        <div class="chat-container">
+            <!-- Chat Area -->
+            <div class="chat-body" id="chat-body">
+              <!-- User Message -->
+              <div class="message user-message">
+                <div class="user-avatar">
+                  <img src="user-avatar.png" alt="User Avatar">
+                </div>
+                <div class="message-content">
+                  <p>What is the purpose of Medcare</p>
+                  <span class="timestamp">15m</span>
+                </div>
+              </div>
+        
+              <!-- AI Response -->
+              <div class="message ai-message">
+                <div class="ai-avatar">
+                  <img src="ai-avatar.png" alt="AI Avatar">
+                </div>
+                <div class="message-content">
+                  <img src="/mnt/data/original-aabe321158e9bd852461c551a6e9d70f.png" alt="Image Description" class="message-image">
+                  <p>Medcare is a AI LLM which assitants individauls with medical or health related, providing realtime approved medical responses in minutes.</p>
+                  <span class="timestamp">15m</span>
+                  <div class="message-actions">
+                    <button class="like-btn">👍</button>
+                    <button class="dislike-btn">👎</button>
+                    <button class="download-btn" style="font-size: 18px;"><i class='bx bx-download'></i></button>
+                    <button class="regenerate-btn" style="font-size: 18px;"><i class='bx bx-loader bx-flip-horizontal'></i> </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Input Area -->
+            <div class="chat-input">
+                <input type="text" name="symptoms" id="symptoms" placeholder="Enter a prompt here...">
+              <!-- <input type="text" id="user-input" placeholder="Enter a prompt here..." > -->
+              <!-- <button onclick="sendMessage()">Send</button> -->
+               <button type="submit" onclick="checkSymptoms()">Send</button>
+            </div>
+          </div>
+        </form>
     </section>
 
-    <div class="footer">
+    <!-- <div class="footer">
         &copy; 2024 Symptom Checker. All rights reserved.
-    </div>
+    </div> -->
 
     <script>
         function checkSymptoms() {
@@ -120,6 +166,99 @@
         window.addEventListener("click", (e) => {
             if (e.target == modal) modal.style.display = "none";
         });
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            $.post("/check_symptoms/", {
+                symptoms: $("#symptoms").val(),
+                csrfmiddlewaretoken: getCookie('csrftoken')
+            }, function(data) {
+                $("#diagnosis").html(data.diagnosis);
+            });
+
+
+//         function sendMessage() {
+//   const inputField = document.getElementById("user-input");
+//   const message = inputField.value.trim();
+
+//   if (message) {
+//     appendMessage("user-message", message);
+//     inputField.value = "";
+
+//     // Simulate bot response
+//     setTimeout(() => {
+//       appendMessage("ai-message", "This is an AI-generated response.");
+//     }, 1000);
+//   }
+// }
+
+// function appendMessage(type, message) {
+//   const chatBody = document.getElementById("chat-body");
+
+//   const messageDiv = document.createElement("div");
+//   messageDiv.classList.add("message", type);
+  
+//   const avatarDiv = document.createElement("div");
+//   avatarDiv.classList.add(type === "user-message" ? "user-avatar" : "ai-avatar");
+
+//   const avatarImg = document.createElement("img");
+//   avatarImg.src = type === "user-message" ? "user-avatar.png" : "ai-avatar.png";
+//   avatarDiv.appendChild(avatarImg);
+  
+//   const messageContentDiv = document.createElement("div");
+//   messageContentDiv.classList.add("message-content");
+  
+//   const messageText = document.createElement("p");
+//   messageText.textContent = message;
+//   messageContentDiv.appendChild(messageText);
+
+//   const timestampSpan = document.createElement("span");
+//   timestampSpan.classList.add("timestamp");
+//   timestampSpan.textContent = "Just now";
+//   messageContentDiv.appendChild(timestampSpan);
+
+//   messageDiv.appendChild(avatarDiv);
+//   messageDiv.appendChild(messageContentDiv);
+
+//   chatBody.appendChild(messageDiv);
+//   chatBody.scrollTop = chatBody.scrollHeight;
+// }
+
+// // Get modal element
+// var modal = document.getElementById("contactModal");
+// var openModalBtn = document.getElementById("openModalBtn");
+// var closeModalBtn = document.getElementsByClassName("close")[0];
+
+// openModalBtn.addEventListener("click", openModal);
+// closeBtn.addEventListener("click", closeModal);
+// window.addEventListener("click", outsideClick);
+
+// function openModal() {
+//   modal.style.display = "block";
+// }
+
+// function closeModal() {
+//   modal.style.display = "none";
+// }
+
+// function outsideClick(e) {
+//   if (e.target == modal) {
+//     modal.style.display = "none";
+//   }
+// }
     </script>
 </body>
 </html>
