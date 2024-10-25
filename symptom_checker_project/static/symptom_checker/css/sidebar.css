@@ -571,3 +571,16 @@ button:hover {
 }
 
 /* Other existing CSS omitted for brevity */
+.interactions-list {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0;
+  margin: 20px 0; /* Margin around the list */
+}
+
+.interaction-item {
+  background-color: white; /* Background for interaction items */
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px; /* Spacing between items */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+}

@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Interactions</title>
-    <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}"> 
+    <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="sidebar">
         <!-- Sidebar for navigation -->
-    <div class="sidebar">
+    <div class="">
         <div class="logo-details">
             <i class='bx bx-health'></i>
             <div class="logo_name">Medcare</div>
@@ -52,7 +53,7 @@
 
         <div class="content">
             {% block content %}
-                <h1>Welcome to the Symptom Checker</h1>
+                <h1>Welcome {{ interaction.timestamp }}</h1>
                 <h2>Your Interactions</h2>
                 <ul class="interactions-list">
                     {% for interaction in interactions %}
@@ -69,19 +70,9 @@
 
     <script src="https://unpkg.com/boxicons@2.0.7/dist/boxicons.min.js"></script>
     <script>
-        // JavaScript to toggle the sidebar (if you have this functionality)
-        const btn = document.getElementById('btn');
-        const sidebar = document.querySelector('.sidebar');
-        const homeSection = document.querySelector('.home-section');
-
-        btn.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-            homeSection.classList.toggle('open'); // Adjust home section based on sidebar state
-        });
-
         // SIDEBAR \\
         // Get the sidebar, close button, and search button elements
-        // let sidebar = document.querySelector(".sidebar");
+        let sidebar = document.querySelector(".sidebar");
         let closeBtn = document.querySelector("#btn");
         let searchBtn = document.querySelector(".bx-search");
         let navList = document.querySelector(".nav-list");
@@ -117,6 +108,91 @@
           menuBtnChange(); // Call function to change button icon
         });
         // END SIDEBAR \\
+
+        function getCurrentDateTime(){
+            const now = new Date();
+            return now.toLocaleString();
+        }
+
+        function sendMessage() {
+            var userInput = $("#user-input").val(); // Get the input value
+            if (userInput.trim() === "") return; // Check if input is not empty
+
+            //current timestamp
+            var currentTime = getCurrentDateTime();
+
+            // Add the user message to the chat
+            $("#chat-body").append(`
+                <div class="message user-message">
+                    <div class="user-avatar">
+                        <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt="">
+                    </div>
+                    <div class="message-content">
+                        <p>${userInput}</p>
+                        <span class="timestamp">${currentTime}</span>
+                    </div>
+                </div>
+            `);
+            
+            // Clear the input field
+            $("#user-input").val("");
+
+            // Send the data to the back-end (Django view)
+            $.post("/check_symptoms/", {
+                symptoms: userInput,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function(data) {
+                // Handle the AI response
+                var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
+                
+                // Add the AI response to the chat
+                setTimeout(() =>{
+                    $("#chat-body").append(`
+                    <div class="message ai-message">
+                        <div class="ai-avatar">
+                            <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
+                        </div>
+                        <div class="message-content">
+                            <p>${aiResponse}</p>
+                            <span class="timestamp">${currentTime}</span>
+                        </div>
+                    </div>
+                `);
+            },2000);
+
+                // Scroll to the bottom of the chat
+                $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
+            });
+        }
+
+        // Get the modal
+        var modal = document.getElementById("contactModal");
+        var openModalBtn = document.getElementById("openModalBtn");
+        var closeModal = document.getElementById("closeModal");
+
+        openModalBtn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Handle form submission
+        document.getElementById("contactForm").onsubmit = function(event) {
+            event.preventDefault(); // Prevent default form submission
+            // You can add your form submission logic here
+            alert("Form submitted!"); // Placeholder alert
+            modal.style.display = "none"; // Close the modal after submission
+        }
     </script>
 </body>
 </html>
