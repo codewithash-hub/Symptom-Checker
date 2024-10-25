@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+@import "https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap";
+@import "https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css";
+
+.header{
+    overflow: hidden;
+    background-color: #ddd;
+    padding: 20px 10px;
+}
+.header a{
+    float: left;
+    color: black;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+}
+@media screen and (max-width: 600px) {
+    .header a{
+        float: none;
+        display: block;
+        text-align: center;
+    }
+    .header-right{
+        float: none;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="header">
+        <a href="#" class="title">Dashboard</a>
+        <div class="header-right">
+            <a href="#"><i class="bx bx-bell"></i></a>
+            <button type="submit" class="SOSBtn">SOS</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+{% extends 'symptom_checker/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medcare | AI</title>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+</head>
+<body>
+    <!-- Main content area -->
+    {% block content %}
+    <section class="home-section">
+        <div class="text">Symptom Checker</div>
+        <!-- SOS Modal -->
+        <div id="contactModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Contact Us</h2>
+                <form id="contactForm">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required>
+                    
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+                    
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        <form method="POST" id="symptom-form">
+            {% csrf_token %}
+            <div class="chat-container">
+                <div class="chat-body" id="chat-body">
+                    
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="Enter a prompt here...">
+                    <button type="button" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </form> 
+    </section>
+    {% endblock %}
+
+    <script>
+            function getCurrentDateTime(){
+                const now = new Date();
+                return now.toLocaleString();
+            }
+    
+            function sendMessage() {
+                var userInput = $("#user-input").val(); // Get the input value
+                if (userInput.trim() === "") return; // Check if input is not empty
+    
+                //current timestamp
+                var currentTime = getCurrentDateTime();
+    
+                // Add the user message to the chat
+                $("#chat-body").append(`
+                    <div class="message user-message">
+                        <div class="user-avatar">
+                            <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt="">
+                        </div>
+                        <div class="message-content">
+                            <p>${userInput}</p>
+                            <span class="timestamp">${currentTime}</span>
+                        </div>
+                    </div>
+                `);
+                
+                // Clear the input field
+                $("#user-input").val("");
+    
+                // Send the data to the back-end (Django view)
+                $.post("/check_symptoms/", {
+                    symptoms: userInput,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                }, function(data) {
+                    // Handle the AI response
+                    var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
+                    
+                    // Add the AI response to the chat
+                    setTimeout(() =>{
+                        $("#chat-body").append(`
+                        <div class="message ai-message">
+                            <div class="ai-avatar">
+                                <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
+                            </div>
+                            <div class="message-content">
+                                <p>${aiResponse}</p>
+                                <span class="timestamp">${currentTime}</span>
+                            </div>
+                        </div>
+                    `);
+                },2000);
+    
+                    // Scroll to the bottom of the chat
+                    $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
+                });
+            }
+    
+            // Get the modal
+            var modal = document.getElementById("contactModal");
+            var openModalBtn = document.getElementById("openModalBtn");
+            var closeModal = document.getElementById("closeModal");
+    
+            openModalBtn.onclick = function() {
+                modal.style.display = "block";
+            }
+    
+            // When the user clicks on <span> (x), close the modal
+            closeModal.onclick = function() {
+                modal.style.display = "none";
+            }
+    
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+    
+            // Handle form submission
+            document.getElementById("contactForm").onsubmit = function(event) {
+                event.preventDefault(); // Prevent default form submission
+                // You can add your form submission logic here
+                alert("Form submitted!"); // Placeholder alert
+                modal.style.display = "none"; // Close the modal after submission
+            }
+    
+    </script>
+</body>
+</html>

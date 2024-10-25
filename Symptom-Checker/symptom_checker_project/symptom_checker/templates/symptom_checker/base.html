@@ -1,0 +1,361 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Medcare | AI</title
+</head>
+<body>
+        <!-- Header -->
+        <div class="header">
+            <button id="toggleSidebar" class="toggle-btn"><i class='bx bx-menu'></i></button>
+            <a href="#" class="title">Medcare</a>
+            <div class="header-right">
+                <a href="#"><i class="bx bx-bell"></i></a>
+                <button type="button" class="SOSBtn" id="openModalBtn">SOS <i class="bx bsx-phone-call"></i></button>
+            </div>
+        </div>
+    
+        <!-- Sidebar for navigation -->
+        <div class="sidebar">
+            <div class="logo-details">
+                <i class='bx bx-health'></i>
+                <div class="logo_name">Medcare</div>
+                <i class='bx bx-menu' id="btn"></i>
+            </div>
+            <ul class="nav-list">
+                <li>
+                    <i class='bx bx-search'></i>
+                    <input type="text" placeholder="Search...">
+                    <span class="tooltip">Search</span>
+                </li>
+                <li><a href="{% url 'home' %}"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a><span class="tooltip">Dashboard</span></li>
+                <li><a href="{% url 'treatment_plan' %}"><i class='bx bx-user'></i><span class="links_name">Treatment Plan</span></a><span class="tooltip">Treatment</span></li>
+                <li><a href="{% url 'chat' %}"><i class='bx bx-chat'></i><span class="links_name">Messages</span></a><span class="tooltip">Messages</span></li>
+                <li><a href="#"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Patient</span></a><span class="tooltip">Patient</span></li>
+                <li><a href="#"><i class='bx bx-cog'></i><span class="links_name">Settings</span></a><span class="tooltip">Settings</span></li>
+                <li class="profile">
+                    <div class="profile-details">
+                        <div class="name_job">
+                            <div class="name">MedCare</div>
+                            <div class="job">User</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'logout' %}"><i class='bx bx-log-out' id="log_out"></i></a>
+                </li>
+            </ul>
+        </div>
+
+        <!---Main components-->
+            {% block content %}
+            <section class="home-section">
+                <div class="text">Symptom Checker</div>
+                <!-- SOS Modal -->
+                <div id="contactModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" id="closeModal">&times;</span>
+                        <h2>Contact Emergency Services</h2>
+                        <form id="contactForm">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" required>
+                            
+                            <label for="location">Location:</label>
+                            <input type="text" id="location" name="location" required>
+                            <label for="number">Phone number:</label>
+                            <input type="tel" id="phone" name="phone" required>
+                            
+                            <label for="message">Message:</label>
+                            <textarea id="message" name="message" rows="4" required></textarea>
+                            
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+        
+                <form method="POST" id="symptom-form">
+                    {% csrf_token %}
+                    <div class="chat-container">
+                        <div class="chat-body" id="chat-body">
+                            
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="user-input" placeholder="Enter a prompt here...">
+                            <button type="button" onclick="sendMessage()">Send <i class='bx bx-send'></i></button>
+                        </div>
+                    </div>
+                </form> 
+            </section>
+            {% endblock %}
+
+
+        <script>
+            // SIDEBAR \\
+            // Get the sidebar, close button, and search button elements
+            let sidebar = document.querySelector(".sidebar");
+            let closeBtn = document.querySelector("#btn");
+            let searchBtn = document.querySelector(".bx-search");
+            let navList = document.querySelector(".nav-list");
+            
+            // Event listener for the menu button to toggle the sidebar open/close
+            closeBtn.addEventListener("click", () => {
+              sidebar.classList.toggle("open"); // Toggle the sidebar's open state
+              navList.classList.toggle("scroll"); // Toggle scroll state
+              menuBtnChange(); // Call function to change button icon
+            });
+            
+            // Event listener for the search button to open the sidebar
+            searchBtn.addEventListener("click", () => {
+              sidebar.classList.toggle("open");
+              navList.classList.toggle("scroll");
+              menuBtnChange(); // Call function to change button icon
+            });
+            
+            // Function to change the menu button icon
+            function menuBtnChange() {
+              if (sidebar.classList.contains("open")) {
+                closeBtn.classList.replace("bx-menu", "bx-menu-alt-right"); // Change icon to indicate closing
+              } else {
+                closeBtn.classList.replace("bx-menu-alt-right", "bx-menu"); // Change icon to indicate opening
+              }
+            }
+            // Get the toggle button element
+            let toggleBtn = document.querySelector("#toggleSidebar");
+            // Event listener for the sidebar toggle button
+            toggleBtn.addEventListener("click", () => {
+              sidebar.classList.toggle("open"); // Toggle the sidebar's open state
+              navList.classList.toggle("scroll"); // Toggle scroll state
+              menuBtnChange(); // Call function to change button icon
+            });
+            // END SIDEBAR \\
+    
+            function getCurrentDateTime(){
+                const now = new Date();
+                return now.toLocaleString();
+            }
+
+            let treatments = [];
+    
+            function sendMessage() {
+                var userInput = $("#user-input").val(); // Get the input value
+                if (userInput.trim() === "") return; // Check if input is not empty
+    
+                //current timestamp
+                var currentTime = getCurrentDateTime();
+    
+                // Add the user message to the chat
+                $("#chat-body").append(`
+                    <div class="message user-message">
+                        <div class="user-avatar">
+                            <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt="">
+                        </div>
+                        <div class="message-content">
+                            <p>${userInput}</p>
+                            <span class="timestamp">${currentTime}</span>
+                        </div>
+                    </div>
+                `);
+                
+                // Clear the input field
+                $("#user-input").val("");
+    
+                // Send the data to the back-end (Django view)
+                    // $.post("/check_symptoms/", {
+                    //     symptoms: userInput,
+                    //     csrfmiddlewaretoken: '{{ csrf_token }}'
+                    // }, function(data) {
+                    //     // Handle the AI response
+                    //     var aiResponse = data.diagnsis
+                  
+                $.post("/check_symptoms/", {
+                    symptoms: userInput,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                }, function(data) {
+                    // Handle the AI response
+                    var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
+                    
+                    // Add the AI response to the chat
+                    setTimeout(() =>{
+                        $("#chat-body").append(`
+                        <div class="message ai-message">
+                            <div class="ai-avatar">
+                                <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
+                            </div>
+                            <div class="message-content">
+                                <p>${aiResponse}</p>
+                                <span class="timestamp">${currentTime}</span>
+                            </div>
+                        </div>
+                    `);
+                },2000);
+    
+                    // Scroll to the bottom of the chat
+                    $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
+                });
+            };
+    
+            // Get the modal
+            var modal = document.getElementById("contactModal");
+            var openModalBtn = document.getElementById("openModalBtn");
+            var closeModal = document.getElementById("closeModal");
+    
+            openModalBtn.onclick = function() {
+                modal.style.display = "block";
+            }
+    
+            // When the user clicks on <span> (x), close the modal
+            closeModal.onclick = function() {
+                modal.style.display = "none";
+            }
+    
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+    
+            // Handle form submission
+            document.getElementById("contactForm").onsubmit = function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Get user input values
+                var name = document.getElementById("name").value;
+                var phone = document.getElementById("phone").value;
+                var location = document.getElementById("location").value;
+                var message = document.getElementById("message").value;
+
+                // Here you can send the data to chat.html (for example, using local storage or URL parameters)
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userPhone', phone);
+                localStorage.setItem('userLocation', location);
+                localStorage.setItem('userMessage', message);
+
+                // Redirect to chat.html
+                window.location.href = "symptom_checker/chat.html";
+            }
+
+            // const treatments = [
+            //     { id: 1, UserName: "Gavin01", userQuery: "i have a Sprain", responseTopic: "Sprain Injury", SOSStatus: "Not Active", action: 60000, profileImg: "https://crhscountyline.com/wp-content/uploads/2020/03/Capture.png" },
+            //     { id: 2, UserName: "Gavin01", userQuery: "i caused a Dislocated shoulder", responseTopic: "Dislocation injury", SOSStatus: "Active", action: 55000, profileImg: "https://crhscountyline.com/wp-content/uploads/2020/03/Capture.png" },
+            //     { id: 3, UserName: "Gavin01", userQuery: "i have few bruises on my feet", responseTopic: "Contusions to soft tissue", SOSStatus: "Not Active", action: 75000, profileImg: "https://crhscountyline.com/wp-content/uploads/2020/03/Capture.png" },
+            //     { id: 4, UserName: "Gavin01", userQuery: "my friend got knocked out", responseTopic: "Concussions", SOSStatus: "Not Active", action: 52000, profileImg: "https://crhscountyline.com/wp-content/uploads/2020/03/Capture.png" },
+            // ];
+
+
+
+            let currentData = [...treatments];
+            let rowsPerPage = 10;
+            let currentPage = 1;
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const tableBody = document.getElementById('table-body');
+                const searchInput = document.getElementById('search-input');
+                const rowsSelect = document.getElementById('rows-select');
+
+                function renderTable(data) {
+                tableBody.innerHTML = '';
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                const paginatedData = data.slice(start, end);
+                
+                paginatedData.forEach(treatment => {
+                    const row = `
+                    {% for query in queries %}
+                        <tr>
+                            <td><img src="${treatment.profileImg}" alt="Profile Image"></td>
+                            <td></td>
+                            <td>{{ query.username }}</td>
+                            <td>{{ query.user_query }}</td>
+                            <td>{{ query.ai_response }}</td>
+                            <td>{{ query.sos_activity }}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="dropdown-button" onclick="showMenu()"><i class='bx bx-dots-vertical-rounded'></i></button>
+                                    <div class="dropdown-content">
+                                        <span class="dropdown-link">Delete <i class='bx bx-trash'></i></span>
+                                        <span class="dropdown-link">Download <i class='bx bx-download'></i></span>
+                                        <span class="dropdown-link">Treatment <i class='bx bx-plus-medical'></i></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+            }
+
+                function sortTable(column, order) {
+                    currentData.sort((a, b) => {
+                        if (typeof a[column] === 'string') {
+                            return order === 'asc' ? a[column].localeCompare(b[column]) : b[column].localeCompare(a[column]);
+                        } else {
+                            return order === 'asc' ? a[column] - b[column] : b[column] - a[column];
+                        }
+                    });
+                    renderTable(currentData);
+                }
+
+                function filterTable(searchTerm) {
+                    const filteredData = treatments.filter(employee =>
+                        Object.values(treatment).some(value =>
+                            value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                    );
+                    currentData = filteredData;
+                    renderTable(currentData);
+                }
+
+                function updateRowsPerPage() {
+                    rowsPerPage = parseInt(rowsSelect.value, 10);
+                    renderTable(currentData);
+                }
+
+                document.querySelectorAll('th').forEach(header => {
+                    header.addEventListener('click', () => {
+                        const column = header.getAttribute('data-column');
+                        const order = header.getAttribute('data-order');
+                        const newOrder = order === 'asc' ? 'desc' : 'asc';
+                        header.setAttribute('data-order', newOrder);
+                        sortTable(column, newOrder);
+                    });
+                });
+
+                searchInput.addEventListener('input', () => {
+                    const searchTerm = searchInput.value;
+                    filterTable(searchTerm);
+                });
+
+                rowsSelect.addEventListener('change', updateRowsPerPage);
+
+                // Initial render
+                renderTable(currentData);
+            });
+
+
+            //action button functions
+            "use strict";
+
+            const dropdownContent = document.querySelector(".dropdown");
+
+            function showMenu(event) {
+                event.stopPropagation(); 
+                const dropdown = event.currentTarget.parentElement;
+                dropdown.classList.toggle("active");
+            }
+
+            window.onclick = (event) => {
+                if (!event.target.matches(".dropdown-button")) {
+                    const dropdowns = document.querySelectorAll(".dropdown");
+                    dropdowns.forEach(dropdown => {
+                        dropdown.classList.remove("active");
+                    });
+                }
+            };
+    
+        </script>
+</body>
+</html>

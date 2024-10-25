@@ -1,0 +1,119 @@
+{% extends 'symptom_checker/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medcare | AI Chat</title>
+</head>
+<body>
+    {% block content %}
+    <section class="home-section">
+        <div class="text">Emergency Assistance</div>
+
+        <!-- <div class="chat_container">
+            <div id="messages"></div>
+            <div id="input-area">
+                <input type="text" id="message-input" placeholder="Type your message..." />
+                <button id="send-btn">Send</button>
+            </div>
+        </div> -->
+
+            <!-- SOS Modal -->
+            <div id="contactModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" id="closeModal">&times;</span>
+                    <h2>Contact Emergency Services</h2>
+                    <form id="contactForm">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                        
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" name="location" required>
+                        <label for="number">Phone number:</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" rows="4" required></textarea>
+                        
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+    
+            <form method="POST" id="">
+                {% csrf_token %}
+                <div class="chat-container">
+                    <div class="chat-body" id="chat-body">
+                        
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="user-input" placeholder="Enter a prompt here...">
+                        <button type="button" onclick="sendRespond()">Send <i class='bx bx-send'></i></button>
+                    </div>
+                </div>
+            </form> 
+        </section>
+
+        <div class="drawer" id="drawer">
+            <img id="profile-img" src="https://via.placeholder.com/100" alt="Profile Image">
+            <div>
+                <h3>Healthcare Assistant</h3>
+                <p>Name: John Doe</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+            <!-- <div id="map">             <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d110877.57680089089!2d30.985514035926226!3d-29.721952687319263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x1ef7a9c8078e80c7%3A0xa6dd29e49ed80383!2sPark%20Avenue%2C%20Umhlanga%2C%20Durban%2C%204321!3m2!1d-29.7219782!2d31.067915399999997!5e0!3m2!1sen!2sza!4v1724703016754!5m2!1sen!2sza" 
+                width="550" height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade"
+               ></iframe>
+            </div> -->
+        </div>
+    {% endblock %}
+
+    <script>
+        var userName = localStorage.getItem('userName');
+        var userPhone = localStorage.getItem('userPhone');
+        var userLocation = localStorage.getItem('userLocation');
+
+        if (userName && userPhone && userLocation) {
+            document.getElementById("response").innerHTML = 
+                `Hello ${userName}, an ambulance is on the way to your location: ${userLocation}. We will contact you at ${userPhone} for further assistance.`;
+        } else {
+            document.getElementById("response").innerHTML = "Error: Unable to retrieve user details.";
+        }
+
+        document.getElementById('send-btn').addEventListener('click', function() {
+            const input = document.getElementById('message-input');
+            const messageText = input.value.trim();
+            if (messageText) {
+                const messagesContainer = document.getElementById('messages');
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chat-message', 'user-message');
+                messageDiv.textContent = messageText;
+                messagesContainer.appendChild(messageDiv);
+                input.value = '';
+
+                setTimeout(() => {
+                    const assistantMessageDiv = document.createElement('div');
+                    assistantMessageDiv.classList.add('chat-message', 'assistant-message');
+                    assistantMessageDiv.textContent = "Thank you for your message!";
+                    messagesContainer.appendChild(assistantMessageDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 1000);
+            }
+        });
+
+        function toggleDrawer() {
+        const drawer = document.getElementById('drawer');
+        drawer.classList.toggle('show');
+        }
+
+        document.getElementById('toggle-drawer-btn').addEventListener('click', toggleDrawer);
+    </script>
+</body>
+</html>

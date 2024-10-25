@@ -1,0 +1,72 @@
+{% extends 'symptom_checker/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medcare | AI</title>
+</head>
+<body>
+    <!--Table Content-->
+    {% block content %}
+    <section class="home-section">
+        <div class="text">AI Medical Responses Records</div>
+        <div class="sidedrawer"></div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <div class="search-wrapper">
+                    <input type="text" id="search-input" placeholder="Search...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="view-options">
+                    <label for="rows-select">Show rows:</label>
+                    <select id="rows-select">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+            <table id="treatment-table">
+                <thead>
+                    <tr>
+                        <th>Profile Image</th>
+                        <th data-column="id" data-order="desc">ID <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="UserName" data-order="desc">Username <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="userQuery" data-order="desc">User Query <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="responseTopic" data-order="desc">Response Topic <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="SOSStatus" data-order="desc">SOS Status <i class='bx bxs-sort-alt'></i></th>
+                        <th data-column="action" data-order="desc"></th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- User data will be inserted here -->
+                    {% for query in queries %}
+                        <tr>
+                            <td><img src="${treatment.profileImg}" alt="Profile Image"></td>
+                            <td>1</td>
+                            <td>codewithash</td>
+                            <td>i am suffering from high fever </td>
+                            <td>fever</td>
+                            <td>Not active</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="dropdown-button" onclick="showMenu()"><i class='bx bx-dots-vertical-rounded'></i></button>
+                                    <div class="dropdown-content">
+                                        <span class="dropdown-link">Delete <i class='bx bx-trash'></i></span>
+                                        <span class="dropdown-link">Download <i class='bx bx-download'></i></span>
+                                        <span class="dropdown-link">Treatment <i class='bx bx-plus-medical'></i></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endblock %}
+
+</body>
+</html>
