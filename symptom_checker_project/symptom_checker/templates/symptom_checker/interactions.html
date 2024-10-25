@@ -53,7 +53,7 @@
 
         <div class="content">
             {% block content %}
-                <h1>Welcome {{ interaction.timestamp }}</h1>
+                <h1>Welcome {{ interaction.user }}</h1>
                 <h2>Your Interactions</h2>
                 <ul class="interactions-list">
                     {% for interaction in interactions %}

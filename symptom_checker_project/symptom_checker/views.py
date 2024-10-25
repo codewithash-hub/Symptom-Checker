@@ -41,6 +41,12 @@ def user_interactions(request):
         print("Template not found: symptom_checker/interactions.html")
     return render(request, 'symptom_checker/interactions.html', {'interactions': interactions})
 
+def interactions_view(request):
+    user_name = request.user.username
+    context = {
+        'user_name': user_name,
+    }
+    return render(request, 'symptom_checker/interactions.html', context)
 
 def signup(request):
     if request.method == 'POST':
