@@ -1,0 +1,10 @@
+<h2>Your Interactions</h2>
+<ul>
+    {% for interaction in interactions %}
+        <li>
+            <strong>Time:</strong> {{ interaction.timestamp }}<br>
+            <strong>Input:</strong> {{ interaction.user_input }}<br>
+            <strong>Response:</strong> {{ interaction.ai_response }}
+        </li>
+    {% endfor %}
+</ul>

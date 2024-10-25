@@ -4,6 +4,9 @@ from .nlp_model import diagnose_symptoms
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpForm, LoginForm
+from .models import Interaction
+from .nlp_model import diagnose_symptoms
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, 'symptom_checker/home.html')
@@ -11,12 +14,27 @@ def home(request):
 def treatment_plan(request):
     return render(request, 'treatment_plan.html')
 
+@login_required  # Ensures only logged-in users can access this view
 def check_symptoms(request):
     if request.method == 'POST':
         symptoms = request.POST.get('symptoms')
+        # Diagnose based on symptoms
         diagnosis = diagnose_symptoms(symptoms)
+        # Save the interaction to the database, linking it to the logged-in user
+        Interaction.objects.create(
+            user=request.user,
+            user_input=symptoms,
+            ai_response=diagnosis
+        )
         return JsonResponse({'diagnosis': diagnosis})
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+# retrieve and display the interactions for the currently logged-in user
+@login_required
+def user_interactions(request):
+    interactions = Interaction.objects.filter(user=request.user)
+    return render(request, 'interactions.html', {'interactions': interactions})
+
 
 def signup(request):
     if request.method == 'POST':
