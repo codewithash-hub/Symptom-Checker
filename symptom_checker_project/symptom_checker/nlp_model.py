@@ -122,21 +122,10 @@
 #         return "Error:", response.status_code, response.text
 
 import requests
-import openai
-
-# Function to get medical information from OpenAI
-def get_medical_response(query):
-    response = openai.Completion.create(
-      model="asst_OV10uc3NaRDq5SwalHQb5swv",  # Replace with a relevant model
-      prompt=f"{query}",
-      max_tokens=150,
-      temperature=0.7
-    )
-    return response.choices[0].text.strip()
 
 def get_health_info(symptoms):
     # URL of the community AI model API
-    api_url = "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"  # Replace with actual API URL
+    api_url = ""  # Replace with actual API URL
     params = {'symptoms': symptoms}
 
     try:
