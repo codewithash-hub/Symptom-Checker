@@ -44,7 +44,7 @@
     <div class="home-section">
         <div class="header">
             <button class="toggle-btn" id="btn">
-                <i class='bx bx-menu'></i> <!-- Icon for toggling sidebar -->
+                <i class='bx bx-menu'></i>
             </button>
             <div class="header-right">
                 <a href="{% url 'home' %}" class="SOSBtn">Back to Home</a>
@@ -125,7 +125,8 @@
             $("#chat-body").append(`
                 <div class="message user-message">
                     <div class="user-avatar">
-                        <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt="">
+                        {% comment %} <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt=""> {% endcomment %}
+                        <i class='bx bx-user' style:"font-size: 20px"></i>
                     </div>
                     <div class="message-content">
                         <p>${userInput}</p>
@@ -145,12 +146,12 @@
                 // Handle the AI response
                 var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
                 
-                // Add the AI response to the chat
                 setTimeout(() =>{
                     $("#chat-body").append(`
-                    <div class="message ai-message">
+                   <div class="message ai-message">
                         <div class="ai-avatar">
-                            <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
+                            {% comment %} <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt=""> {% endcomment %}
+                            <i class='bx bx-paperclip' style:"font-size: 20px"></i>
                         </div>
                         <div class="message-content">
                             <p>${aiResponse}</p>
@@ -160,7 +161,7 @@
                 `);
             },2000);
 
-                // Scroll to the bottom of the chat
+                 Scroll to the bottom of the chat
                 $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
             });
         }

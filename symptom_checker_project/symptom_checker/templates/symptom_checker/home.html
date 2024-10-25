@@ -15,7 +15,12 @@
         <button id="toggleSidebar" class="toggle-btn"><i class='bx bx-menu'></i></button>
         <a href="#" class="title">Medcare</a>
         <div class="header-right">
-            <a href="#"><i class="bx bx-bell"></i></a>
+            <a href="#" class="notification" id="notificationBtn"><i class="bx bx-bell"></i></a>
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="notification-content" id="notificationContent">
+                    <!-- Repeated symptoms will be inserted here -->
+                </div>
+            </div>
             <button type="button" class="SOSBtn" id="openModalBtn">SOS <i class="bx bsx-phone-call"></i></button>
         </div>
     </div>
@@ -211,6 +216,14 @@
             alert("Form submitted!"); // Placeholder alert
             modal.style.display = "none"; // Close the modal after submission
         }
+
+        // toggle functionality
+        $(document).ready(function() {
+            $(".faq-question").click(function() {
+                $(this).next(".faq-answer").slideToggle(); // Toggle the corresponding answer
+            });
+        });
+        
 
     </script>
 </body>

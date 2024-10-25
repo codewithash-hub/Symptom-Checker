@@ -4,7 +4,7 @@ from .nlp_model import diagnose_symptoms
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpForm, LoginForm
-from .models import Interaction
+from .models import Interaction, FAQ
 from .nlp_model import diagnose_symptoms
 from django.contrib.auth.decorators import login_required
 from django.template.loader import get_template
@@ -47,6 +47,11 @@ def interactions_view(request):
         'user_name': user_name,
     }
     return render(request, 'symptom_checker/interactions.html', context)
+
+def faq_view(request):
+    faqs = FAQ.objects.all() 
+    return render(request, 'home.html', {'faqs': faqs})
+
 
 def signup(request):
     if request.method == 'POST':

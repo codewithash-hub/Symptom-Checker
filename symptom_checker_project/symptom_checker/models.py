@@ -16,3 +16,11 @@ class Interaction(models.Model):
     
     class Meta:
         ordering = ['-timestamp']
+
+
+class FAQ(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+
+    def __str__(self):
+        return self.question
