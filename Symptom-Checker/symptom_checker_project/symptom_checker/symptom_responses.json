@@ -1,0 +1,30 @@
+{
+    "respiratory": {
+        "fever": "Fever may indicate infection or inflammation. Stay hydrated, rest, and monitor your temperature. If the fever is high or lasts more than 48 hours, consult a healthcare provider.",
+        "cough": "A persistent cough can be a sign of a respiratory infection, allergy, or irritation. Monitor other symptoms and seek medical advice if it continues for more than a week.",
+        "shortness of breath": "Shortness of breath may result from respiratory, cardiac, or anxiety issues. Seek immediate medical attention if breathing becomes difficult.",
+        "sneezing": "Sneezing is often a reaction to allergens or irritants. Try to identify potential allergens and avoid exposure. If symptoms persist, consider allergy testing.",
+        "wheezing": "Wheezing could be a sign of asthma, respiratory infection, or airway irritation. See a doctor if wheezing occurs frequently or alongside shortness of breath."
+    },
+    "gastrointestinal": {
+        "nausea": "Nausea can result from infections, food sensitivities, or digestive issues. Stay hydrated, avoid heavy foods, and rest. If nausea persists, see a healthcare provider.",
+        "vomiting": "Vomiting may indicate a gastrointestinal issue or infection. Stay hydrated with small sips of water. Seek medical advice if vomiting continues or if dehydration occurs.",
+        "diarrhea": "Diarrhea can be due to infections, food poisoning, or dietary issues. Stay hydrated, and avoid fatty foods. Consult a doctor if it lasts more than two days.",
+        "constipation": "Constipation can result from a low-fiber diet, dehydration, or lack of exercise. Increase fiber intake, drink water, and consider mild physical activity. Consult a doctor if it persists.",
+        "abdominal pain": "Abdominal pain may result from digestive issues, infection, or muscle strain. Rest and avoid heavy meals. Seek medical advice if pain is intense or persistent."
+    },
+    "musculoskeletal": {
+        "joint pain": "Joint pain may be caused by arthritis, injury, or overuse. Rest the joint, apply ice, and avoid strenuous activity. If pain continues, consult a doctor.",
+        "muscle pain": "Muscle pain is often due to strain or injury. Rest, hydrate, and consider light stretching if it\u2019s mild. If pain persists, seek medical evaluation.",
+        "back pain": "Back pain may arise from poor posture, strain, or underlying issues. Practice good posture, avoid lifting heavy objects, and see a doctor if it doesn\u2019t improve.",
+        "neck pain": "Neck pain can result from strain, poor posture, or injury. Rest and avoid sudden movements. Consult a doctor if it persists or is severe.",
+        "sprain": "A sprain may require rest, ice, compression, and elevation (RICE). Avoid putting weight on the injured area, and consult a doctor if swelling or pain persists."
+    },
+    "neurological": {
+        "headache": "Headaches can stem from stress, dehydration, or other factors. Drink water, rest, and reduce screen time. Seek medical advice if headaches are frequent or severe.",
+        "dizziness": "Dizziness may be due to dehydration, low blood pressure, or an inner ear issue. Sit or lie down, drink water, and if dizziness persists, consult a doctor.",
+        "tingling": "Tingling may be caused by nerve irritation, circulation issues, or pressure on nerves. If tingling persists or affects a large area, seek medical advice.",
+        "numbness": "Numbness can result from nerve compression, injury, or circulation issues. If numbness is persistent or extensive, consult a healthcare provider.",
+        "blurred vision": "Blurred vision can occur from eye strain, fatigue, or other conditions. Rest your eyes and ensure good lighting. Seek medical advice if it persists or if you experience additional symptoms."
+    }
+}
