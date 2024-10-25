@@ -1,10 +1,122 @@
-<h2>Your Interactions</h2>
-<ul>
-    {% for interaction in interactions %}
-        <li>
-            <strong>Time:</strong> {{ interaction.timestamp }}<br>
-            <strong>Input:</strong> {{ interaction.user_input }}<br>
-            <strong>Response:</strong> {{ interaction.ai_response }}
-        </li>
-    {% endfor %}
-</ul>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Interactions</title>
+    <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}"> 
+</head>
+<body>
+    <div class="sidebar">
+        <!-- Sidebar for navigation -->
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bx-health'></i>
+            <div class="logo_name">Medcare</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <i class='bx bx-search'></i>
+                <input type="text" placeholder="Search...">
+                <span class="tooltip">Search</span>
+            </li>
+            <li><a href="{% url 'home' %}"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a><span class="tooltip">Dashboard</span></li>
+            <li><a href="{% url 'user_interactions' %}"><i class='bx bx-user'></i><span class="links_name">Treatment Plan</span></a><span class="tooltip">Treatment</span></li>
+            <li><a href="./Pages/chat.html"><i class='bx bx-chat'></i><span class="links_name">Messages</span></a><span class="tooltip">Messages</span></li>
+            <li><a href="#"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Patient</span></a><span class="tooltip">Patient</span></li>
+            <li><a href="#"><i class='bx bx-cog'></i><span class="links_name">Settings</span></a><span class="tooltip">Settings</span></li>
+            <li class="profile">
+                <div class="profile-details">
+                    <div class="name_job">
+                        <div class="name">MedCare</div>
+                        <div class="job">User</div>
+                    </div>
+                </div>
+                <a href="#"><i class='bx bx-log-out' id="log_out"></i></a>
+            </li>
+        </ul>
+    </div>
+    </div>
+
+    <div class="home-section">
+        <div class="header">
+            <button class="toggle-btn" id="btn">
+                <i class='bx bx-menu'></i> <!-- Icon for toggling sidebar -->
+            </button>
+            <div class="header-right">
+                <a href="{% url 'home' %}" class="SOSBtn">Back to Home</a>
+            </div>
+        </div>
+
+        <div class="content">
+            {% block content %}
+                <h1>Welcome to the Symptom Checker</h1>
+                <h2>Your Interactions</h2>
+                <ul class="interactions-list">
+                    {% for interaction in interactions %}
+                        <li class="interaction-item">
+                            <strong>Time:</strong> {{ interaction.timestamp }}<br>
+                            <strong>Input:</strong> {{ interaction.user_input }}<br>
+                            <strong>Response:</strong> {{ interaction.ai_response }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endblock %}
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/boxicons@2.0.7/dist/boxicons.min.js"></script>
+    <script>
+        // JavaScript to toggle the sidebar (if you have this functionality)
+        const btn = document.getElementById('btn');
+        const sidebar = document.querySelector('.sidebar');
+        const homeSection = document.querySelector('.home-section');
+
+        btn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            homeSection.classList.toggle('open'); // Adjust home section based on sidebar state
+        });
+
+        // SIDEBAR \\
+        // Get the sidebar, close button, and search button elements
+        // let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+        let navList = document.querySelector(".nav-list");
+        
+        // Event listener for the menu button to toggle the sidebar open/close
+        closeBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open"); // Toggle the sidebar's open state
+          navList.classList.toggle("scroll"); // Toggle scroll state
+          menuBtnChange(); // Call function to change button icon
+        });
+        
+        // Event listener for the search button to open the sidebar
+        searchBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open");
+          navList.classList.toggle("scroll");
+          menuBtnChange(); // Call function to change button icon
+        });
+        
+        // Function to change the menu button icon
+        function menuBtnChange() {
+          if (sidebar.classList.contains("open")) {
+            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right"); // Change icon to indicate closing
+          } else {
+            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu"); // Change icon to indicate opening
+          }
+        }
+        // Get the toggle button element
+        let toggleBtn = document.querySelector("#toggleSidebar");
+        // Event listener for the sidebar toggle button
+        toggleBtn.addEventListener("click", () => {
+          sidebar.classList.toggle("open"); // Toggle the sidebar's open state
+          navList.classList.toggle("scroll"); // Toggle scroll state
+          menuBtnChange(); // Call function to change button icon
+        });
+        // END SIDEBAR \\
+    </script>
+</body>
+</html>

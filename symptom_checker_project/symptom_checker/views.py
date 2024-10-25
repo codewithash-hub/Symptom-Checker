@@ -7,6 +7,8 @@ from .forms import SignUpForm, LoginForm
 from .models import Interaction
 from .nlp_model import diagnose_symptoms
 from django.contrib.auth.decorators import login_required
+from django.template.loader import get_template
+from django.template import TemplateDoesNotExist
 
 def home(request):
     return render(request, 'symptom_checker/home.html')
@@ -33,7 +35,11 @@ def check_symptoms(request):
 @login_required
 def user_interactions(request):
     interactions = Interaction.objects.filter(user=request.user)
-    return render(request, 'interactions.html', {'interactions': interactions})
+    try:
+        template = get_template('symptom_checker/interactions.html')
+    except TemplateDoesNotExist:
+        print("Template not found: symptom_checker/interactions.html")
+    return render(request, 'symptom_checker/interactions.html', {'interactions': interactions})
 
 
 def signup(request):
