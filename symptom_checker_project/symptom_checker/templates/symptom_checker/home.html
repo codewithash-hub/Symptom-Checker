@@ -78,7 +78,10 @@
             </div>
         </div>
 
-        
+        <center><div class="imageUpload">
+            <span class="drop-zone">Drop & drop or click to choose files</span>
+            <input type="file" name="myFile" class="drop-zoneInput">
+        </div></center>
 
         <form method="POST" id="symptom-form">
             {% csrf_token %}
@@ -134,7 +137,7 @@
         });
         // END SIDEBAR \\
 
-        function getCurrentDateTime(){
+        {% comment %} function getCurrentDateTime(){
             const now = new Date();
             return now.toLocaleString();
         }
@@ -188,6 +191,74 @@
                 // Scroll to the bottom of the chat
                 $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
             });
+        } {% endcomment %}
+        function sendMessage() {
+            var userInput = $("#user-input").val(); // Get the input value
+            if (userInput.trim() === "") return; // Check if input is not empty
+        
+            // Current timestamp
+            var currentTime = getCurrentDateTime();
+        
+            // Add the user message to the chat
+            $("#chat-body").append(`
+                <div class="message user-message">
+                    <div class="user-avatar">
+                        <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt="">
+                    </div>
+                    <div class="message-content">
+                        <p>${userInput}</p>
+                        <span class="timestamp">${currentTime}</span>
+                    </div>
+                </div>
+            `);
+            
+            // Clear the input field
+            $("#user-input").val("");
+        
+            // Send the data to the back-end (Django view)
+            $.post("/check_symptoms/", {
+                symptoms: userInput,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function(data) {
+                // Handle the AI response
+                var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
+        
+                // Add AI response to the chat after a delay
+                setTimeout(() => {
+                    printResponseWordByWord(aiResponse, currentTime);
+                }, 2000);
+        
+                // Scroll to the bottom of the chat
+                $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
+            });
+        }
+        
+        function printResponseWordByWord(response, timestamp) {
+            const words = response.split(' '); // Split the response into words
+            let index = 0;
+        
+            // Function to display the next word
+            function displayNextWord() {
+                if (index < words.length) {
+                    $("#chat-body").append(`
+                        <div class="message ai-message">
+                            <div class="ai-avatar">
+                                <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
+                            </div>
+                            <div class="message-content">
+                                <p>${words[index]}</p>
+                                <span class="timestamp">${timestamp}</span>
+                            </div>
+                        </div>
+                    `);
+                    index++;
+                    $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight); // Scroll to the bottom
+                    setTimeout(displayNextWord, 800); // Call this function again after 800 milliseconds
+                }
+            }
+        
+            // Start displaying words
+            displayNextWord();
         }
 
         // Get the modal
@@ -225,6 +296,118 @@
                 $(this).next(".faq-answer").slideToggle(); // Toggle the corresponding answer
             });
         });
+
+        // Drag and Drop  functionality
+        document.querySelectorAll(".drop-zoneInput").forEach((inputElement) => {
+            const dropZoneElement = inputElement.closest(".imageUpload");
+        
+            dropZoneElement.addEventListener("click", (e) => {
+                inputElement.click();
+            });
+        
+            inputElement.addEventListener("change", (e) => {
+                if (inputElement.files.length) {
+                    handleFileUpload(dropZoneElement, inputElement.files[0]);
+                }
+            });
+        
+            dropZoneElement.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                dropZoneElement.classList.add("drop-zone--over");
+            });
+        
+            ["dragleave", "dragend"].forEach((type) => {
+                dropZoneElement.addEventListener(type, (e) => {
+                    dropZoneElement.classList.remove("drop-zone--over");
+                });
+            });
+        
+            dropZoneElement.addEventListener("drop", (e) => {
+                e.preventDefault();
+        
+                if (e.dataTransfer.files.length) {
+                    inputElement.files = e.dataTransfer.files;
+                    handleFileUpload(dropZoneElement, e.dataTransfer.files[0]);
+                }
+        
+                dropZoneElement.classList.remove("drop-zone--over");
+            });
+        });
+        
+        function handleFileUpload(dropZoneElement, file) {
+            updateThumbnail(dropZoneElement, file);
+            sendFileNameToChat(file.name);
+        }
+        
+        function sendFileNameToChat(fileName) {
+            // Here you can determine the response based on the file name
+            let responseMessage = '';
+        
+            switch (fileName.toLowerCase()) {
+                case 'infections.jpg':
+                    responseMessage = "Based on the image you provided, the infection seems to be rash, and red swelling, which can caused by stretching or tearing of ligaments, itchy skin, and allergens.<br> Treatment: Rest, ice, compression, and elevation.";
+                    break;
+                case 'cut-wound.jpg':
+                    responseMessage = "Based on the image you provided, the open cut wound involves a break in the skin that leaves the internal tissue exposed, the cause of cut may be due to a sharp object, <br>it can be treated by cleaning the wound, pat the area dry with a clean towel, and apply a plaster.";
+                    break;
+                case 'bruises.jpg':
+                    responseMessage = "Bruises are a common symptom that often appear as discoloration and tenderness on the skin. They typically occur due to an impact injury. To help with recovery, it's best to apply ice, get plenty of rest, and consider pain relief options as needed.";
+                    break;
+                // Add more cases as needed
+                default:
+                    responseMessage = "Error : Unable to determine the type of injury based on the image provided.";
+                    break;
+            }
+        
+            // Add the response to the chat
+            const currentTime = getCurrentDateTime();
+            setTimeout(() => {
+                $("#chat-body").append(`
+                    <div class="message ai-message">
+                        <div class="ai-avatar">
+                            <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
+                        </div>
+                        <div class="message-content">
+                            <p>${responseMessage}</p>
+                            <span class="timestamp">${currentTime}</span>
+                        </div>
+                    </div>
+                `);
+            }, 3000);
+        
+            // Scroll to the bottom of the chat
+            $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
+        }
+        
+        function updateThumbnail(dropZoneElement, file) {
+            let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
+        
+            // First time - remove the prompt
+            if (dropZoneElement.querySelector(".drop-zone")) {
+                dropZoneElement.querySelector(".drop-zone").remove();
+            }
+        
+            // First time - there is no thumbnail element, so lets create it
+            if (!thumbnailElement) {
+                thumbnailElement = document.createElement("div");
+                thumbnailElement.classList.add("drop-zone__thumb");
+                dropZoneElement.appendChild(thumbnailElement);
+            }
+        
+            thumbnailElement.dataset.label = file.name;
+        
+            // Show thumbnail for image files
+            if (file.type.startsWith("image/")) {
+                const reader = new FileReader();
+        
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+                };
+            } else {
+                thumbnailElement.style.backgroundImage = null;
+            }
+        }
         
 
     </script>
