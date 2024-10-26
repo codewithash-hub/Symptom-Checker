@@ -165,51 +165,51 @@ def diagnose_symptoms(symptoms):
     if 'fever' in symptoms:
         return ("A fever often indicates an infection, such as a cold or flu. "
                 "Stay hydrated, rest, and consider over-the-counter medications like acetaminophen or cold srupy but ensure you speak with your doctor. "
-                "If the fever persists for more than a couple of days or is very high, consult a doctor. " + health_advice)
+                "If the fever persists for more than a couple of days or is very high, consult a doctor. " )
                 
     elif 'headache' in symptoms:
         return ("Headaches can be caused by tension, dehydration, or even sinus issues. "
                 "Try drinking more water, resting in a dark room, or using a cold compress. "
-                "If headaches are severe or frequent, consider consulting a healthcare professional. " + health_advice)
+                "If headaches are severe or frequent, consider consulting a healthcare professional. ")
                 
     elif 'cough' in symptoms:
         return ("A cough might result from a respiratory infection, allergies, or even environmental irritants. "
                 "Stay hydrated, use throat lozenges, and consider a humidifier. "
-                "If it persists for more than a week or is accompanied by difficulty breathing, see a doctor. " + health_advice)
+                "If it persists for more than a week or is accompanied by difficulty breathing, see a doctor. ")
                 
     elif 'sore throat' in symptoms:
         return ("A sore throat could be due to an infection or allergies. "
                 "Gargling with salt water, staying hydrated, and using throat lozenges can help. "
-                "If the soreness lasts longer than a few days or is severe, seek medical advice. " + health_advice)
+                "If the soreness lasts longer than a few days or is severe, seek medical advice. ")
                 
     elif 'muscle pain' in symptoms:
         return ("Muscle pain can arise from strain, overexertion, or even stress. "
                 "Rest, gentle stretching, and applying heat or ice can provide relief. "
-                "If the pain persists or worsens, consider consulting a healthcare professional. " + health_advice)
+                "If the pain persists or worsens, consider consulting a healthcare professional. ")
                 
     elif 'joint pain' in symptoms:
         return ("Joint pain might be a sign of arthritis or an injury. "
                 "Resting the joint, applying ice, and taking anti-inflammatory medications can help. "
-                "If the pain continues or is accompanied by swelling, consult a doctor. " + health_advice)
+                "If the pain continues or is accompanied by swelling, consult a doctor. ")
                 
     elif 'sprain' in symptoms:
         return ("A sprain usually occurs from twisting or overstretching a ligament. "
                 "Follow the RICE method: Rest, Ice, Compression, and Elevation. "
-                "If the pain is severe or doesn’t improve, see a healthcare provider. " + health_advice)
+                "If the pain is severe or doesn’t improve, see a healthcare provider. " )
                 
     elif 'fracture' in symptoms:
         return ("If you suspect a fracture, it's important to seek medical attention immediately. "
-                "In the meantime, immobilize the area and avoid putting weight on it. " + health_advice)
+                "In the meantime, immobilize the area and avoid putting weight on it. ")
                 
     elif 'back pain' in symptoms:
         return ("Back pain can result from muscle strain, poor posture, or herniated discs. "
                 "Gentle stretching, applying heat, and maintaining good posture can help alleviate pain. "
-                "If it persists or worsens, consider consulting a healthcare professional. " + health_advice)
+                "If it persists or worsens, consider consulting a healthcare professional. ")
                 
     elif 'nausea' in symptoms:
         return ("Nausea can be caused by infections, dietary issues, or even anxiety. "
                 "Try ginger tea, staying hydrated, and eating bland foods. "
-                "If nausea continues or is severe, consult a doctor. " + health_advice)
+                "If nausea continues or is severe, consult a doctor. ")
                 
     else:
         # If symptom is not recognized, query OpenAI

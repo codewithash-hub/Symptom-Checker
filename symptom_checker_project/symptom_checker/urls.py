@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('chatbot/', views.chatbot, name='chatbot'),
     path('faqs/', views.FAQ, name='faq'),
+    path('nearby/', views.nearby, name='nearby'),
 ]

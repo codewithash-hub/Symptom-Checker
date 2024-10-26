@@ -36,7 +36,8 @@ def check_symptoms(request):
         return JsonResponse({'diagnosis': diagnosis})
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-
+def nearby(request):
+    return render(request, 'symptom_checker/nearby.html')
 
 # def check_symptoms(request):
 #     if request.method == "POST":

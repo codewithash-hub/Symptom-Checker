@@ -322,39 +322,6 @@
     font-size: 20px;
 }
 
-.header-right {
-  position: relative;
-}
-
-.notification {
-  position: relative;
-  cursor: pointer;
-}
-
-.notification-dropdown {
-  display: none; /* Hidden by default */
-  position: absolute;
-  background-color: white;
-  border: 1px solid #ccc;
-  width: 200px;
-  z-index: 1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.notification:hover .notification-dropdown {
-  display: block; /* Show dropdown on hover */
-}
-
-.notification-content {
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.notification-content p {
-  padding: 10px;
-  margin: 0;
-}
-
 .header .header-right a {
     margin-right: 15px; /* Space between icon and SOS button */
 }
@@ -391,6 +358,9 @@
 
 .user-avatar, .ai-avatar {
   margin-right: 15px;
+}
+.user-avatar i, .ai-avatar i{
+  font-size: 20px;
 }
 
 .user-avatar img, .ai-avatar img {
@@ -596,243 +566,115 @@ button:hover {
   }
 }
 
-/* Ensure input stays fixed at the bottom*/
+/* Ensure input stays fixed at the bottom */
 .chat-container {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 60px); /* Adjust height to account for header */
 }
 
-.interactions-list {
-  list-style-type: none; /* Remove default list styling */
-  padding: 0;
-  margin: 20px 0; /* Margin around the list */
-}
-
-.interaction-item {
-  background-color: white; /* Background for interaction items */
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 10px; /* Spacing between items */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-}
- 
 /* Other existing CSS omitted for brevity */
 .table-container {
-  width: 90%;
-  margin: 20px auto;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-} 
-
-
+    width: 90%;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
 /* Main content (home section) styling */
 .main-section {
-  position: relative;
-  background: #E4E9F7; /* Light background for main content */
-  min-height: 100vh;
-  top: 0;
-  left: 78px;
-  width: calc(100% - 78px); /* Adjusts width to fit next to sidebar */
-  transition: all 0.5s ease;
-  z-index: 2;
-}
+    position: relative;
+    background: #E4E9F7; /* Light background for main content */
+    min-height: 100vh;
+    top: 0;
+    left: 78px;
+    width: calc(100% - 78px); /* Adjusts width to fit next to sidebar */
+    transition: all 0.5s ease;
+    z-index: 2;
+  }
 .main-section .text {
-  display: inline-block;
-  color: #11101d;
-  font-size: 25px;
-  font-weight: 500;
-  margin: 18px;
+    display: inline-block;
+    color: #11101d;
+    font-size: 25px;
+    font-weight: 500;
+    margin: 18px;
 }
 
 .table-header {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
 }
 
 .search-wrapper {
-  flex: 1;
-  display: flex;
-  align-items: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
 }
 
 .search-wrapper input {
-  padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-  margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-right: 10px;
 }
 
 .view-options {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .view-options label {
-  margin-right: 10px;
-  font-size: 16px;
+    margin-right: 10px;
+    font-size: 16px;
 }
 
 .view-options select {
-  padding: 5px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
 th {
-  background-color: #f0f0f0;
-  cursor: pointer;
-  position: relative;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    position: relative;
 }
 
 th i {
-  margin-left: 5px;
+    margin-left: 5px;
 }
 
 td {
-  max-width: 300px; /* Increased maximum width for better visibility of long addresses */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    max-width: 300px; /* Increased maximum width for better visibility of long addresses */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 td img {
-  width: 50px; /* Square width */
-  height: 50px; /* Square height */
-  border-radius: 5px; /* Square corners */
-  display: block;
-  margin: 0 auto; /* Centering the image */
+    width: 50px; /* Square width */
+    height: 50px; /* Square height */
+    border-radius: 5px; /* Square corners */
+    display: block;
+    margin: 0 auto; /* Centering the image */
 }
-.dropdown {
-position: relative;
-display: inline-block;
-}
-
-.dropdown-button {
-display: inline-flex;
-align-items: center;
-column-gap: 0.5rem;
-border-radius: 0.375rem;
-background: blue;
-padding: 0.625rem 0.875rem;
-font-size: 0.875rem;
-line-height: 1.25rem;
-font-weight: 600;
-color: #ffffff;
-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-border: none;
-outline: 1px solid blue;
-cursor: pointer;
-}
-.dropdown-button:hover {
-background: #6366f1;
-}
-
-.dropdown-content {
-  position: absolute;
-  top: 3rem;
-  margin-top: 0.5rem;
-  width: 14rem;
-  opacity: 0;
-  visibility: hidden;
-  transform: scaleY(0);
-  transform-origin: top right;
-  border-radius: 0.375rem;
-  background: #ffffff;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  z-index: 99;
-}
-
-.dropdown.active .dropdown-content {
-  opacity: 1;
-  transform: scaleY(1);
-  visibility: visible;
-}
-
-.dropdown-link span  {
-display: block;
-padding: 0.5rem 1rem;
-font-size: 0.875rem;
-line-height: 1.25rem;
-color: #4a5568;
-}
-.dropdown-link:hover {
-color: #111827;
-background: #f1f1f1;
-}
-
-.imageUpload {
-  max-width: 600px;
-  height: 200px;
-  padding: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-family: "Quicksand", sans-serif;
-  font-weight: 500;
-  font-size: 20px;
-  cursor: pointer;
-  color: #cccccc;
-  border: 4px dashed #ccc;
-  border-radius: 10px;
-}
-
-.drop-zone--over {
-  border-style: solid;
-}
-
-.drop-zoneInput {
-  display: none;
-}
-
-.drop-zone__thumb {
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: #cccccc;
-  background-size: cover;
-  position: relative;
-}
-
-.drop-zone__thumb::after {
-  content: attr(data-label);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 5px 0;
-  color: #ffffff;
-  background: rgba(0, 0, 0, 0.75);
-  font-size: 14px;
-  text-align: center;
-}
-.drop-zone__thumb:hover{
-  background-color: blue;
-  border: blue;
-  transition: all  .3s ease-in-out;
-}
-
 .dropdown {
   position: relative;
   display: inline-block;
@@ -945,4 +787,61 @@ background: #f1f1f1;
   background-color: blue;
   border: blue;
   transition: all  .3s ease-in-out;
+}
+
+.notifications-drawer {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Hidden by default */
+  width: 300px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: right 0.3s ease;
+  z-index: 100; /* Ensure it's above other content */
+}
+
+.notifications-drawer.open {
+  right: 0; /* Show the drawer */
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa; /* Light background for header */
+  border-bottom: 1px solid #ddd;
+}
+
+.drawer-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.close-drawer {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.notifications-content {
+  padding: 15px;
+  max-height: calc(100% - 60px); /* Leave space for header */
+  overflow-y: auto; /* Enable scrolling if content exceeds height */
+}
+
+.notifications-content ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notifications-content li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+.notifications-content ul li i{
+  color: red;
 }
