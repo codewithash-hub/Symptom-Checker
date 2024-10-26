@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="{% static 'symptom_checker/css/style.css' %}"> -->
+    {% comment %} <link rel="stylesheet" href="{% static 'symptom_checker/css/style.css' %}">  {% endcomment %}
     <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}">
     <title>Medcare | AI</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -57,7 +57,7 @@
 
     <!-- Main content area -->
     <section class="home-section">
-        <div class="text">Symptom Checker</div>
+        <div class="text" style="text-align: center;">Symptom Checker</div>
         <!-- SOS Modal -->
         <div id="contactModal" class="modal">
             <div class="modal-content">
@@ -77,6 +77,8 @@
                 </form>
             </div>
         </div>
+
+        
 
         <form method="POST" id="symptom-form">
             {% csrf_token %}
