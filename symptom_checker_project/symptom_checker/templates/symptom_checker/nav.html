@@ -1,0 +1,54 @@
+<nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="h-font navbar-brand" href="#">MEDCARE</a>
+      <div class="left-menu">
+          <a class="navbar-brand" href="#"><img src="images/profile.jpg" class="rounded-circle me-2" style="width:32px; height:32px" alt="">Masepela Winstan</a>
+          <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          
+      </div>
+      
+      <div class="offcanvas offcanvas-end text-bg-light bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="h-font offcanvas-title text-light" id="offcanvasDarkNavbarLabel">MAIN MENU</h5>
+          <div class="left-menu">
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.php"><i class="bi bi-speedometer2"></i> Dashboad</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="bi bi-hospital"></i> Emergency Call</a>
+            </li>
+  
+            <li class="nav-item">
+              <a class="nav-link" href="chatboard.php"><i class="bi bi-chat-right-dots-fill"></i> Chat board</a>
+            </li> 
+  
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-lungs"></i> My Health
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-break"></i> History</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-chat-right-text-fill"></i> Messages</a></li>
+                <li><a class="dropdown-item" href="nearby.php"><i class="bi bi-geo-alt-fill"></i> Near by</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-in-left"></i> Sign out</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form class="d-flex mt-3" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>

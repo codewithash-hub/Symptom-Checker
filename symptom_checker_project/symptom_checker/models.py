@@ -6,7 +6,7 @@ default_user = User.objects.first()
 
 # Create your models here.
 class Interaction(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=default_user.id)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     user_input = models.TextField() 
     ai_response = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -24,3 +24,14 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+    
+    
+    
+class Feed(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.CharField(max_length=250, default='', blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    images = models.ImageField(upload_to='uploads/product/')
+    
+    def __str__(self):
+        return self.title

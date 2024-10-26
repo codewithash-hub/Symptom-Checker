@@ -4,412 +4,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% comment %} <link rel="stylesheet" href="{% static 'symptom_checker/css/style.css' %}">  {% endcomment %}
-    <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'symptom_checker/css/styles.css' %}"> 
+    {% comment %} <link rel="stylesheet" href="{% static 'symptom_checker/css/sidebar.css' %}"> {% endcomment %}
     <title>Medcare | AI</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <button id="toggleSidebar" class="toggle-btn"><i class='bx bx-menu'></i></button>
-        <a href="#" class="title">Medcare</a>
-        <div class="header-right">
-            <a href="#" class="notification" id="notificationBtn"><i class="bx bx-bell"></i></a>
-            <div class="notification-dropdown" id="notificationDropdown">
-                <div class="notification-content" id="notificationContent">
-                    <!-- Repeated symptoms will be inserted here -->
+    {% comment %} New layout {% endcomment %}
+    <div class="main-content col-lg-8 col-md-8 col-sm-12 themed-grid-col rounded bg-white shadow overflow-hidden mt-2 mb-2">
+
+        {% comment %} Navigation {% endcomment %}
+
+        <nav class="navbar navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+              <a class="h-font navbar-brand" href="#">MEDCARE</a>
+              <div class="left-menu">
+                  <a class="navbar-brand" href="#"><img src="images/profile.jpg" class="rounded-circle me-2" style="width:32px; height:32px" alt="">Masepela Winstan</a>
+                  <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                  </button>
+                  
+              </div>
+              
+              <div class="offcanvas offcanvas-end text-bg-light bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+                <div class="offcanvas-header">
+                  <h5 class="h-font offcanvas-title text-light" id="offcanvasDarkNavbarLabel">MAIN MENU</h5>
+                  <div class="left-menu">
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                  </div>
                 </div>
+                <div class="offcanvas-body">
+                  <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="{% url 'home' %}"><i class="bi bi-speedometer2"></i> Dashboad</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#"><i class="bi bi-hospital"></i> Emergency Call</a>
+                    </li>
+          
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'chatbot' %}"><i class="bi bi-chat-right-dots-fill"></i> Chatbot</a>
+                    </li> 
+          
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="bi bi-lungs"></i> My Health
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-break"></i> History</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-chat-right-text-fill"></i> Messages</a></li>
+                        <li><a class="dropdown-item" href="nearby.php"><i class="bi bi-geo-alt-fill"></i> Near by</a></li>
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-in-left"></i> Sign out</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                  <form class="d-flex mt-3" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-success" type="submit">Search</button>
+                  </form>
+                </div>
+              </div>
             </div>
-            <button type="button" class="SOSBtn" id="openModalBtn">SOS <i class="bx bsx-phone-call"></i></button>
-        </div>
-    </div>
+          </nav>
 
-    <!-- Sidebar for navigation -->
-    <div class="sidebar">
-        <div class="logo-details">
-            <i class='bx bx-health'></i>
-            <div class="logo_name">Medcare</div>
-            <i class='bx bx-menu' id="btn"></i>
-        </div>
-        <ul class="nav-list">
-            <li>
-                <i class='bx bx-search'></i>
-                <input type="text" placeholder="Search...">
-                <span class="tooltip">Search</span>
-            </li>
-            <li><a href="#"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a><span class="tooltip">Dashboard</span></li>
-            <li><a href="{% url 'user_interactions' %}"><i class='bx bx-user'></i><span class="links_name">Treatment Plan</span></a><span class="tooltip">Treatment</span></li>
-            <li><a href="./Pages/chat.html"><i class='bx bx-chat'></i><span class="links_name">Messages</span></a><span class="tooltip">Messages</span></li>
-            <li><a href="#"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Patient</span></a><span class="tooltip">Patient</span></li>
-            <li><a href="#"><i class='bx bx-cog'></i><span class="links_name">Settings</span></a><span class="tooltip">Settings</span></li>
-            <li class="profile">
-                <div class="profile-details">
-                    <div class="name_job">
-                        <div class="name">MedCare</div>
-                        <div class="job">User</div>
-                    </div>
-                </div>
-                <a href="{% url 'logout' %}"><i class='bx bx-log-out' id="log_out"></i></a>
-            </li>
-        </ul>
-    </div>
+        {% comment %} End Navigation {% endcomment %}
+        
+        <div class="body-content row">
 
-    <!-- Main content area -->
-    <section class="home-section">
-        <div class="text" style="text-align: center;">Symptom Checker</div>
-        <!-- SOS Modal -->
-        <div id="contactModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="closeModal">&times;</span>
-                <h2>Contact Us</h2>
-                <form id="contactForm">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
+            <div class="col-md-8 col-sm-12" data-bs-spy="scroll">
+                <div class="system-content mt-4">
+
+                    <div class="dash-deading bg-dark text-light text-center"><h4 class="p-3">Hello! Winstan How can I help you today?</h4></div>
                     
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" name="location" required>
-                    
-                    <label for="message">Message:</label>
-                    <textarea id="message" name="message" rows="4" required></textarea>
-                    
-                    <button type="submit">Submit</button>
-                </form>
+                    <div class="row p-4 content-scroll">
+                        <h5 class="card-title mb-2">Most searched topics</h5>
+                        {% for feed in feeds %}
+                        <div class="col-md-6 col-sm-12 mb-4">
+                            <a href="" class="dash-card-link" style="text-decoration: none; color: #000;">
+                                <div class="card rounded" style="width: 18rem;">
+                                    {% comment %} <img src="images/deepcut.jpg" class="card-img-top" alt="..."> {% endcomment %}
+                                    {% if feed.images %}
+                                        <img  class="card-img-top  mb-4" src="{{ feed.images.url }}" alt="{{ feed.title }}" style="height: 5%;" />
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ feed.title }}</h5>
+                                        <p class="card-text">{{ feed.description|truncatewords:10 }}.</p>
+                                        <p class="card-text"><small class="text-body-secondary">Last updated {{ feed.date_added }} ago</small></p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        
+                    {% empty %}
+                        <li>No feeds available.</li>
+                    {% endfor %}
+                </div>       
             </div>
-        </div>
 
-        <center><div class="imageUpload">
-            <span class="drop-zone">Drop & drop or click to choose files</span>
-            <input type="file" name="myFile" class="drop-zoneInput">
-        </div></center>
-
-        <form method="POST" id="symptom-form">
-            {% csrf_token %}
-            <div class="chat-container">
-                <div class="chat-body" id="chat-body">
-                    
-                </div>
-                <div class="chat-input">
-                    <input type="text" id="user-input" placeholder="Enter a prompt here...">
-                    <button type="button" onclick="sendMessage()">Send</button>
-                </div>
-            </div>
-        </form> 
-    </section>
-
-    <script>
-        // SIDEBAR \\
-        // Get the sidebar, close button, and search button elements
-        let sidebar = document.querySelector(".sidebar");
-        let closeBtn = document.querySelector("#btn");
-        let searchBtn = document.querySelector(".bx-search");
-        let navList = document.querySelector(".nav-list");
-        
-        // Event listener for the menu button to toggle the sidebar open/close
-        closeBtn.addEventListener("click", () => {
-          sidebar.classList.toggle("open"); // Toggle the sidebar's open state
-          navList.classList.toggle("scroll"); // Toggle scroll state
-          menuBtnChange(); // Call function to change button icon
-        });
-        
-        // Event listener for the search button to open the sidebar
-        searchBtn.addEventListener("click", () => {
-          sidebar.classList.toggle("open");
-          navList.classList.toggle("scroll");
-          menuBtnChange(); // Call function to change button icon
-        });
-        
-        // Function to change the menu button icon
-        function menuBtnChange() {
-          if (sidebar.classList.contains("open")) {
-            closeBtn.classList.replace("bx-menu", "bx-menu-alt-right"); // Change icon to indicate closing
-          } else {
-            closeBtn.classList.replace("bx-menu-alt-right", "bx-menu"); // Change icon to indicate opening
-          }
-        }
-        // Get the toggle button element
-        let toggleBtn = document.querySelector("#toggleSidebar");
-        // Event listener for the sidebar toggle button
-        toggleBtn.addEventListener("click", () => {
-          sidebar.classList.toggle("open"); // Toggle the sidebar's open state
-          navList.classList.toggle("scroll"); // Toggle scroll state
-          menuBtnChange(); // Call function to change button icon
-        });
-        // END SIDEBAR \\
-
-        {% comment %} function getCurrentDateTime(){
-            const now = new Date();
-            return now.toLocaleString();
-        }
-
-        function sendMessage() {
-            var userInput = $("#user-input").val(); // Get the input value
-            if (userInput.trim() === "") return; // Check if input is not empty
-
-            //current timestamp
-            var currentTime = getCurrentDateTime();
-
-            // Add the user message to the chat
-            $("#chat-body").append(`
-                <div class="message user-message">
-                    <div class="user-avatar">
-                        <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt="">
-                    </div>
-                    <div class="message-content">
-                        <p>${userInput}</p>
-                        <span class="timestamp">${currentTime}</span>
-                    </div>
-                </div>
-            `);
+            <!--system feeds-->
             
-            // Clear the input field
-            $("#user-input").val("");
+        </div>
+        <div class="col-md-4 col-sm-12">
 
-            // Send the data to the back-end (Django view)
-            $.post("/check_symptoms/", {
-                symptoms: userInput,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            }, function(data) {
-                // Handle the AI response
-                var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
+            <div class="feeds-picks mt-4 shadow rounded">
+                <h5 class="header-feeds p-3">Awareness</h5>
                 
-                // Add the AI response to the chat
-                setTimeout(() =>{
-                    $("#chat-body").append(`
-                    <div class="message ai-message">
-                        <div class="ai-avatar">
-                            <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
-                        </div>
-                        <div class="message-content">
-                            <p>${aiResponse}</p>
-                            <span class="timestamp">${currentTime}</span>
-                        </div>
+                <div class="list-group">
+                  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1">
+                        Teen Pregnancy Event Highlights Gaps in Sexual Health Services for Youth</h5>
+                      <small>3 days ago</small>
                     </div>
-                `);
-            },2000);
-
-                // Scroll to the bottom of the chat
-                $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
-            });
-        } {% endcomment %}
-        function sendMessage() {
-            var userInput = $("#user-input").val(); // Get the input value
-            if (userInput.trim() === "") return; // Check if input is not empty
-        
-            // Current timestamp
-            var currentTime = getCurrentDateTime();
-        
-            // Add the user message to the chat
-            $("#chat-body").append(`
-                <div class="message user-message">
-                    <div class="user-avatar">
-                        <img src="{% static 'symptom_checker/images/user-circle.svg' %}" alt="">
+                    <p class="mb-1">Yoliswa Sobuwa  October 22, 2024</p>
+                    <small>Continue Reading »</small>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1">KZN girl with rare skin condition robbed of a ‘normal’ life </h5>
+                      <small class="text-body-secondary">3 days ago</small>
                     </div>
-                    <div class="message-content">
-                        <p>${userInput}</p>
-                        <span class="timestamp">${currentTime}</span>
+                    <p class="mb-1">Sandile Mbili  October 17, 2024.</p>
+                    <small class="text-body-secondary">Continue Reading »</small>
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1">Emalahleni grandpa denied care by two hospitals</h5>
+                      <small class="text-body-secondary">3 days ago</small>
                     </div>
+                    <p class="mb-1">Precious Mashiane  October 16, 2024</p>
+                    <small class="text-body-secondary">Continue Reading »</small>
+                  </a>
                 </div>
-            `);
-            
-            // Clear the input field
-            $("#user-input").val("");
-        
-            // Send the data to the back-end (Django view)
-            $.post("/check_symptoms/", {
-                symptoms: userInput,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            }, function(data) {
-                // Handle the AI response
-                var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
-        
-                // Add AI response to the chat after a delay
-                setTimeout(() => {
-                    printResponseWordByWord(aiResponse, currentTime);
-                }, 2000);
-        
-                // Scroll to the bottom of the chat
-                $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
-            });
-        }
-        
-        function printResponseWordByWord(response, timestamp) {
-            const words = response.split(' '); // Split the response into words
-            let index = 0;
-        
-            // Function to display the next word
-            function displayNextWord() {
-                if (index < words.length) {
-                    $("#chat-body").append(`
-                        <div class="message ai-message">
-                            <div class="ai-avatar">
-                                <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
-                            </div>
-                            <div class="message-content">
-                                <p>${words[index]}</p>
-                                <span class="timestamp">${timestamp}</span>
-                            </div>
-                        </div>
-                    `);
-                    index++;
-                    $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight); // Scroll to the bottom
-                    setTimeout(displayNextWord, 800); // Call this function again after 800 milliseconds
-                }
-            }
-        
-            // Start displaying words
-            displayNextWord();
-        }
+            </div>
 
-        // Get the modal
-        var modal = document.getElementById("contactModal");
-        var openModalBtn = document.getElementById("openModalBtn");
-        var closeModal = document.getElementById("closeModal");
-
-        openModalBtn.onclick = function() {
-            modal.style.display = "block";
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        closeModal.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Handle form submission
-        document.getElementById("contactForm").onsubmit = function(event) {
-            event.preventDefault(); // Prevent default form submission
-            // You can add your form submission logic here
-            alert("Form submitted!"); // Placeholder alert
-            modal.style.display = "none"; // Close the modal after submission
-        }
-
-        // toggle functionality
-        $(document).ready(function() {
-            $(".faq-question").click(function() {
-                $(this).next(".faq-answer").slideToggle(); // Toggle the corresponding answer
-            });
-        });
-
-        // Drag and Drop  functionality
-        document.querySelectorAll(".drop-zoneInput").forEach((inputElement) => {
-            const dropZoneElement = inputElement.closest(".imageUpload");
-        
-            dropZoneElement.addEventListener("click", (e) => {
-                inputElement.click();
-            });
-        
-            inputElement.addEventListener("change", (e) => {
-                if (inputElement.files.length) {
-                    handleFileUpload(dropZoneElement, inputElement.files[0]);
-                }
-            });
-        
-            dropZoneElement.addEventListener("dragover", (e) => {
-                e.preventDefault();
-                dropZoneElement.classList.add("drop-zone--over");
-            });
-        
-            ["dragleave", "dragend"].forEach((type) => {
-                dropZoneElement.addEventListener(type, (e) => {
-                    dropZoneElement.classList.remove("drop-zone--over");
-                });
-            });
-        
-            dropZoneElement.addEventListener("drop", (e) => {
-                e.preventDefault();
-        
-                if (e.dataTransfer.files.length) {
-                    inputElement.files = e.dataTransfer.files;
-                    handleFileUpload(dropZoneElement, e.dataTransfer.files[0]);
-                }
-        
-                dropZoneElement.classList.remove("drop-zone--over");
-            });
-        });
-        
-        function handleFileUpload(dropZoneElement, file) {
-            updateThumbnail(dropZoneElement, file);
-            sendFileNameToChat(file.name);
-        }
-        
-        function sendFileNameToChat(fileName) {
-            // Here you can determine the response based on the file name
-            let responseMessage = '';
-        
-            switch (fileName.toLowerCase()) {
-                case 'infections.jpg':
-                    responseMessage = "Based on the image you provided, the infection seems to be rash, and red swelling, which can caused by stretching or tearing of ligaments, itchy skin, and allergens.<br> Treatment: Rest, ice, compression, and elevation.";
-                    break;
-                case 'cut-wound.jpg':
-                    responseMessage = "Based on the image you provided, the open cut wound involves a break in the skin that leaves the internal tissue exposed, the cause of cut may be due to a sharp object, <br>it can be treated by cleaning the wound, pat the area dry with a clean towel, and apply a plaster.";
-                    break;
-                case 'bruises.jpg':
-                    responseMessage = "Bruises are a common symptom that often appear as discoloration and tenderness on the skin. They typically occur due to an impact injury. To help with recovery, it's best to apply ice, get plenty of rest, and consider pain relief options as needed.";
-                    break;
-                // Add more cases as needed
-                default:
-                    responseMessage = "Error : Unable to determine the type of injury based on the image provided.";
-                    break;
-            }
-        
-            // Add the response to the chat
-            const currentTime = getCurrentDateTime();
-            setTimeout(() => {
-                $("#chat-body").append(`
-                    <div class="message ai-message">
-                        <div class="ai-avatar">
-                            <img src="{% static 'templates/symptom_checker/images/chat-gpt.png' %}" alt="">
-                        </div>
-                        <div class="message-content">
-                            <p>${responseMessage}</p>
-                            <span class="timestamp">${currentTime}</span>
-                        </div>
-                    </div>
-                `);
-            }, 3000);
-        
-            // Scroll to the bottom of the chat
-            $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
-        }
-        
-        function updateThumbnail(dropZoneElement, file) {
-            let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
-        
-            // First time - remove the prompt
-            if (dropZoneElement.querySelector(".drop-zone")) {
-                dropZoneElement.querySelector(".drop-zone").remove();
-            }
-        
-            // First time - there is no thumbnail element, so lets create it
-            if (!thumbnailElement) {
-                thumbnailElement = document.createElement("div");
-                thumbnailElement.classList.add("drop-zone__thumb");
-                dropZoneElement.appendChild(thumbnailElement);
-            }
-        
-            thumbnailElement.dataset.label = file.name;
-        
-            // Show thumbnail for image files
-            if (file.type.startsWith("image/")) {
-                const reader = new FileReader();
-        
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                    thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
-                };
-            } else {
-                thumbnailElement.style.backgroundImage = null;
-            }
-        }
-        
-
-    </script>
+        </div>
+    </div>
+    {% comment %} End New layout {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="{% static 'symptom_checker/js/scripts.js' %}"></script>
 </body>
 </html>

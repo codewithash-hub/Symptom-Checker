@@ -102,7 +102,7 @@
 #             return symptoms[symptom]
 #     return "Symptom not recognized. Please provide more details or consult a healthcare provider."
 
-# import requests
+import requests
 
 # def diagnose_symptoms(symptom):
 #     symptom = symptom.lower()

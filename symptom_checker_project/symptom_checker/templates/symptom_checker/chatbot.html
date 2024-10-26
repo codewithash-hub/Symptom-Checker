@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madcare | Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'symptom_checker/css/styles.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="main-content col-lg-8 col-md-8 col-sm-12 themed-grid-col rounded bg-white shadow overflow-hidden mt-2 mb-2">
+        <nav class="navbar navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="h-font navbar-brand" href="#">MEDCARE</a>
+                <div class="left-menu">
+                    <a class="navbar-brand" href="#"><img src="images/profile.jpg" class="rounded-circle me-2" alt="Profile">Masepela Winstan</a>
+                    <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                <div class="offcanvas offcanvas-end text-bg-light bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="h-font offcanvas-title text-light" id="offcanvasDarkNavbarLabel">MAIN MENU</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{% url 'home' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="bi bi-hospital"></i> Emergency Call</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'chatbot' %}"><i class="bi bi-chat-right-dots-fill"></i> Chatbot</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-lungs"></i> My Health
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-break"></i> History</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-chat-right-text-fill"></i> Messages</a></li>
+                                    <li><a class="dropdown-item" href="nearby.php"><i class="bi bi-geo-alt-fill"></i> Nearby</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-in-left"></i> Sign out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="d-flex mt-3" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-success" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="body-content row">
+            <div class="col-md-8 col-sm-12" data-bs-spy="scroll">
+                        <div class="chatboard-content chat-body mt-4" id="chat-body">
+                            <!-- Messages will be appended here dynamically -->
+                        
+                            {% comment %} <div class="message message-in">
+                                <img src="https://via.placeholder.com/40" alt="User">
+                                <div class="message-text">
+                                    Hello! How can I help you today?
+                                    <div class="timestamp">08:00 AM</div>
+                                </div>
+                            </div>{% endcomment %}
+
+                            <!-- Outgoing Message -->
+                            <div class="message message-out">
+                                <div class="message-text">
+                                    I need help with my recent order.
+                                    <div class="timestamp">08:02 AM</div>
+                                </div>
+                            </div> 
+                        </div>
+                    
+                    
+                <form id="chat-form" onsubmit="return false;"> <!-- Prevent default submit -->
+                    <div class="input-group m-4">
+                        <input type="text" class="form-control shadow-none" id="user-input" placeholder="Type your message..." aria-label="User input" autocomplete="off">
+                        <button onclick="sendMessage();" class="btn btn-outline-secondary shadow-none" id="button-addon2"><i class="bi bi-send-fill"></i></button>
+                        {% csrf_token %}
+                    </div>
+                </form>
+        
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="feeds-picks mt-4 shadow rounded">
+                    <h5 class="header-feeds p-3">History</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getCurrentDateTime(){
+            const now = new Date();
+            return now.toLocaleString();
+        }
+
+        function sendMessage() {
+            var userInput = $("#user-input").val(); // Get the input value
+            if (userInput.trim() === "") return; // Check if input is not empty
+
+            //current timestamp
+            var currentTime = getCurrentDateTime();
+
+            // Add the user message to the chat
+            $("#chat-body").append(`
+                <div class="message message-in">
+                    <div class="message-content">
+                        <p>${userInput}</p>
+                        <span class="timestamp">${currentTime}</span>
+                    </div>
+                </div>
+            `);
+            
+            // Clear the input field
+            $("#user-input").val("");
+
+            // Send the data to the back-end (Django view)
+            $.post("/check_symptoms/", {
+                symptoms: userInput,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, function(data) {
+                // Handle the AI response
+                var aiResponse = data.diagnosis;  // Assume the back-end returns diagnosis in 'data.diagnosis'
+                
+                // Add the AI response to the chat
+                setTimeout(() =>{
+                    $("#chat-body").append(`
+                    <div class=" message message-out">
+                        <div class="message-content">
+                            <p>${aiResponse}</p>
+                            <span class="timestamp">${currentTime}</span>
+                        </div>
+                    </div>
+                `);
+            },2000);
+
+                // Scroll to the bottom of the chat
+                $("#chat-body").scrollTop($("#chat-body")[0].scrollHeight);
+            });
+        }
+
+        // Get the modal
+        var modal = document.getElementById("contactModal");
+        var openModalBtn = document.getElementById("openModalBtn");
+        var closeModal = document.getElementById("closeModal");
+
+        openModalBtn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Handle form submission
+        document.getElementById("contactForm").onsubmit = function(event) {
+            event.preventDefault(); // Prevent default form submission
+            // You can add your form submission logic here
+            alert("Form submitted!"); // Placeholder alert
+            modal.style.display = "none"; // Close the modal after submission
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</body>
+</html>

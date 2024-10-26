@@ -4,14 +4,19 @@ from .nlp_model import diagnose_symptoms
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpForm, LoginForm
-from .models import Interaction, FAQ
+from .models import Interaction, FAQ, Feed
 from .nlp_model import diagnose_symptoms
 from django.contrib.auth.decorators import login_required
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
 
+# def home(request):
+#     return render(request, 'symptom_checker/home.html')
+
 def home(request):
-    return render(request, 'symptom_checker/home.html')
+    feeds = Feed.objects.all()
+
+    return render(request, 'symptom_checker/home.html', {'feeds': feeds})
 
 def treatment_plan(request):
     return render(request, 'treatment_plan.html')
@@ -31,6 +36,15 @@ def check_symptoms(request):
         return JsonResponse({'diagnosis': diagnosis})
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+
+
+# def check_symptoms(request):
+#     if request.method == "POST":
+#         user_symptoms = request.POST.get('symptoms', '').lower()
+#         diagnosis = diagnose_symptoms(user_symptoms)
+#         return JsonResponse({'diagnosis': diagnosis})
+#     return JsonResponse({'diagnosis': 'Invalid request method.'})
+
 # retrieve and display the interactions for the currently logged-in user
 @login_required
 def user_interactions(request):
@@ -38,15 +52,15 @@ def user_interactions(request):
     try:
         template = get_template('symptom_checker/interactions.html')
     except TemplateDoesNotExist:
-        print("Template not found: symptom_checker/interactions.html")
-    return render(request, 'symptom_checker/interactions.html', {'interactions': interactions})
+        print("Template not found: symptom_checker/chatbot.html")
+    return render(request, 'symptom_checker/chatbot.html', {'interactions': interactions})
 
-def interactions_view(request):
+def chatbot(request):
     user_name = request.user.username
     context = {
         'user_name': user_name,
     }
-    return render(request, 'symptom_checker/interactions.html', context)
+    return render(request, 'symptom_checker/chatbot.html', context)
 
 def faq_view(request):
     faqs = FAQ.objects.all() 
